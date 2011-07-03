@@ -1,6 +1,6 @@
 /**
  * @author Jason Angus
- * @file ch09ex05.c
+ * @file ch09ex06.c
  * @date 2011-07-03
  *
  * Implement Book class defined in ch09ex05.h
@@ -9,7 +9,7 @@
  */
 
 //#include "../std_lib_facilities.h"
-#include "ch09ex05.hpp"
+#include "ch09ex06.hpp"
 
 using namespace Library; // for Book class
 
@@ -19,14 +19,22 @@ using namespace Library; // for Book class
 int main()
 {
 	Book bk;
+	Book bk2;
 	try {
-		bk.read_isbn();
+		bk.read_title();
 		bk.read_author();
+		bk.read_isbn();
 		bk.read_copyright();
 		bk.checkout();
 		bk.print();
 		bk.checkin();
 		bk.print();
+		std::cout << "Is bk == bk2?...." << ((bk==bk2)? "Yes":"No") <<std::endl;
+		std::cout << bk2;
+		bk2.print();
+		bk2 = bk;
+		std::cout << "Is bk != bk2?...." << ((bk!=bk2)? "Yes":"No") <<std::endl;
+		std::cout << bk2;
 	}
 	catch (std::runtime_error& e) {
 		std::cerr << "runtime error: " << e.what() << std::endl;
@@ -38,7 +46,7 @@ int main()
 
 // default constructor
 Book::Book()
-	:is_checkedin(false)
+	: isbn13("###"), title("***"), author(2,"***"), is_checkedin(false)
 {
 	std::cout << "DEBUG: Book()\n";
 }
@@ -52,8 +60,9 @@ Book::Book()
 void Book::print()
 {
 	std::cout << "DEBUG: print()\n";
-	std::cout <<	"ISBN:\t" <<get_isbn()<<std::endl<<
-				"Author:\t" <<get_author()<<std::endl<<
+	std::cout <<	"ISBN:\t\t" <<get_isbn()<<std::endl<<
+				"Title:\t\t" <<get_title()<<std::endl<<
+				"Author:\t\t" <<get_author()<<std::endl<<
 				"Copyright:\t" <<get_copyright()<<std::endl<<
 				"Checked in:\t" <<(is_bookin()? "Yes":"No")<<std::endl;
 	return;
@@ -89,6 +98,19 @@ void Book::read_isbn()
 }
 
 /**
+ * read input data and set title for book
+ */
+void Book::read_title()
+{
+	std::string str_in; // input from user
+	std::cout << "DEBUG: read_title()\n";
+
+	std::cout << "Enter book's title: ";
+	std::getline(std::cin, str_in);
+	title = str_in;
+}
+
+/**
  * read input data and set author for book
  */
 void Book::read_author()
@@ -98,10 +120,12 @@ void Book::read_author()
 
 	std::cout << "Enter author's first name: ";
 	std::getline(std::cin, str_in);
-	author.push_back(str_in);
+	//author.push_back(str_in);
+	author[Book::first]=str_in;
 	std::cout << "Enter author's last name: ";
 	std::getline(std::cin, str_in);
-	author.push_back(str_in);
+	//author.push_back(str_in);
+	author[Book::last]=str_in;
 }
 
 /**
@@ -176,3 +200,24 @@ bool Library::islong(std::string data)
 	}
 	return is_long;
 }
+
+// logic operators
+bool Library::operator==(const Book& a, const Book& b)
+{
+	return a.get_isbn()==b.get_isbn();
+}
+
+bool Library::operator!=(const Book& a, const Book& b)
+{
+	//return !(a.get_isbn()==b.get_isbn());
+	return !(a==b);
+}
+
+// Have a << print out the title, author, and ISBN on separate lines.
+std::ostream& Library::operator<<(std::ostream& os, const Book& book)
+{
+	std::cout <<	"Title:\t" <<book.get_title()<<std::endl<<
+			"Author:\t" <<book.get_author()<<std::endl<<
+			"ISBN:\t" <<book.get_isbn()<<std::endl;
+	return os;
+ }

@@ -1,20 +1,13 @@
 /**
  * @author Jason Angus
- * @file ch09ex05.h
+ * @file ch09ex06.h
  * @date 2011-07-03
  *
- * create a class for books kept in a library
- * Class Book should have members for:
- * ISBN
- * title
- * author
- * copyright date
- * Also store data on whether or not the book is checked out.
- * Create functions for returning those data values.
- * Create functions for chccking a book in and out.
- * Do simple validation of data entered into a Book:
- * for example, accept ISBNs only of the form n-n-n-x where n is an
- * integer and x is a digit or a letter.
+ * Add operators for the Book class.
+ * Have the == operator check whether the ISBN numbers are the same
+ * for two books.
+ * Have != also compare the ISBN numbers.
+ * Have a << print out the title author, and ISBN on separate lines.
  */
 
 #include <boost/date_time/gregorian/gregorian.hpp> // for date handling
@@ -29,6 +22,7 @@ class Book {
 		// non-modifying operations
 		Book(); // default constructor
 		std::string get_isbn() const {return isbn13;}
+		std::string get_title() const {return title;}
 		std::string get_author() const {return author[Book::first] + " " + author[Book::last];}
 		std::string get_copyright() {return boost::gregorian::to_simple_string(copyright);}
 		bool is_bookin() const {return is_checkedin;}
@@ -36,6 +30,7 @@ class Book {
 
 		// modifying operation
 		void read_isbn();
+		void read_title();
 		void read_author();
 		void read_copyright();
 		void checkout() {std::cout << "DEBUG: checkout()\n";is_checkedin=false;}
@@ -63,6 +58,10 @@ class Book {
 		bool is_checkedin;
 };
 
+// overloaded operators
+bool operator==(const Book& a, const Book& b);
+bool operator!=(const Book& a, const Book& b);
+std::ostream& operator<<(std::ostream& os, const Book& book);
 // helper functions
 
 /**
