@@ -11,17 +11,20 @@
 int main()
 {
 	const string fname="ints.txt"; // filename
+
 	try {
 		int int_from_file; // read from file
 		int ifftotal=0; // total of ints  from file
 
 		// read data from file
 		ifstream ist(fname.c_str());
-
 		if (!ist) error("can't open input file: ", fname);
+		// make ist throw if it goes bad
+		ist.exceptions(ist.exceptions()|ios_base::badbit);
+
 		while (ist >> int_from_file)
 			ifftotal+=int_from_file;
-
+		if (ist.eof()) cout << "OK: reached eof.\n";
 		cout << "ifftotal: \n" << ifftotal << endl;
 	}
 	catch (runtime_error& e) {
