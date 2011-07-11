@@ -69,8 +69,8 @@ class Book {
 bool operator==(const Book& a, const Book& b);
 bool operator!=(const Book& a, const Book& b);
 std::ostream& operator<<(std::ostream& os, const Book& book);
-// helper functions
 
+// helper functions
 /**
  * returns true if string represents an integer
  */

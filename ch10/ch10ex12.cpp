@@ -4,6 +4,9 @@
  *
  * 12. Write a program that given a file name and a word outputs each line that
  * contains that word together with the line number. Hint: getline().
+ *
+ * Wrongly or rightly, I've assumed WORD to be found is surrounded by space.
+ * I'm not ignoring adjacent punctuation. This is a very basic search function.
  */
 
 #include "../std_lib_facilities.h"

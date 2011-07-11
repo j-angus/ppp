@@ -141,8 +141,12 @@ void Book::read_genre()
 	std::string str_in; // input from user
 	bool is_genre = false; // true if user enters a valid genre
 	while (is_genre == false) {
-		std::cout <<	"0.\tFiction\n" << "1.\tNonfiction\n" << "2.\tPeriodical\n" <<
-					"3.\tBiography\n" <<"4.\tChildren\n" <<"5.\tUnkown\n";
+		std::cout << "0.\tFiction\n"
+			  << "1.\tNonfiction\n"
+			  << "2.\tPeriodical\n"
+			  << "3.\tBiography\n"
+			  << "4.\tChildren\n"
+			  << "5.\tUnkown\n";
 		std::cout << "Select number coresponding to genre:\n";
 		std::getline(std::cin, str_in);
 		if (isint(str_in)) {
@@ -302,9 +306,9 @@ bool Library::operator!=(const Book& a, const Book& b)
 // Have a << print out the title, author, and ISBN on separate lines.
 std::ostream& Library::operator<<(std::ostream& os, const Book& book)
 {
-	std::cout <<	"Title:\t" <<book.get_title()<<std::endl<<
-			"Author:\t" <<book.get_author()<<std::endl<<
-			"Genre:\t" <<book.genre_tostring()<<std::endl<<
-			"ISBN:\t" <<book.get_isbn()<<std::endl;
+	std::cout << "Title:\t"  << book.get_title() << std::endl
+		  << "Author:\t" << book.get_author() << std::endl
+		  << "Genre:\t"  << book.genre_tostring() << std::endl
+		  << "ISBN:\t"   << book.get_isbn() << std::endl;
 	return os;
  }
