@@ -34,12 +34,14 @@ int main()
 		for (int i = 0; i<loop; ++i)
 			cout << name[i] << ", " << age[i] << endl;
 		cout << endl;
-		// make copies of vectors so we can sort age to match up with name after it is sorted
+		// make copies of vectors so we can sort age to match up with
+		// name after it is sorted
 		vector<string> old_name_order = name;
 		vector<int> old_age = age;
 		sort(name.begin(), name.end());
 		// sort age to match up with name
-		if (old_name_order != name) { // only sort if the order of name has changed
+		if (old_name_order != name) {	// only sort if the order of
+						// name has changed
 			for (int i=0; i<old_name_order.size(); ++i) {
 				for (int j=0; j<name.size(); ++j) {
 					cout << "i: " << i << ", j: " << j << endl;
@@ -74,4 +76,3 @@ void print(const vector<string>& v, const string vlabel)
 		cout << v[i] << endl;
 	return;
 }
-

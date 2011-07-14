@@ -1,11 +1,12 @@
 /**
  * @author Jason Angus
- * @file ch09ex07.c
+ * @file ch09ex07.cpp
  * @date 2011-07-03
  *
  * Implement Book class defined in ch09ex05.h
  * g++ -lboost_date_time -Wall -o../bin/"%e" "%f"
- * the "-lboost_date_time" is important to enable compilation with boost date_time library
+ * the "-lboost_date_time" is important to enable compilation with
+ * boost date_time library
  */
 
 //#include "../std_lib_facilities.h"
@@ -50,7 +51,11 @@ int main()
 
 // default constructor
 Book::Book()
-	: isbn13("###"), title("***"), author(2,"***"), is_checkedin(false), genre(unknown)
+	: isbn13("###"),
+	  title("***"),
+	  author(2,"***"),
+	  is_checkedin(false),
+	  genre(unknown)
 {
 	std::cout << "DEBUG: Book()\n";
 }
@@ -94,7 +99,8 @@ void Book::read_isbn()
 				is_isbn = true;
 			}
 			else
-				std::cout << "Error: ISBN must be " <<isbn13_length<< " digits. Please try again.\n";
+				std::cout << "Error: ISBN must be " << isbn13_length
+						  << " digits. Please try again.\n";
 		}
 		else {
 			std::cout << "Error: Invalid isbn. Please try again.\n";
@@ -199,7 +205,8 @@ void Book::read_copyright()
 		std::getline(std::cin, str_in);
 		try {
 			copyright = from_string(str_in);
-			is_date = true; // if no errors thrown by from_string()h, date is good
+			// if no errors thrown by from_string(), date is good
+			is_date = true;
 		} //out_of_range
 		catch (std::exception& e) {
 			std::cerr << "date error: " << e.what() << std::endl;
