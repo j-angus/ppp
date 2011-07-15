@@ -8,7 +8,7 @@
  * 9. Create a Library class.
  * Include vectors of Books and Patrons.
  * Include a struct called Transaction.
- * Have it include a Book, a Patron , and a Date from the chapter.
+ * Have it include a Book, a Patron, and a Date from the chapter.
  * Make a vector of Transactions.
  * Create functions to add books to the library, add patrons to the library, and
  * check out books.
@@ -50,7 +50,7 @@ public:
 	Library();
 	void add_patron(Patron p); // adds a member to the library
 	void add_book(Book b); // adds a book to the library collection
-	void checkout_book(); // allows a patron to checkout a book
+	void checkout_book(Book b, Patron p); // allows a patron to checkout a book
 	void list_book_titles(); // lists book titles in library collection
 	void list_books(); // lists all books and book info in collection
 	void list_patron_names(); // lists names of library patrons
