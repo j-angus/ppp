@@ -4,84 +4,108 @@
  * @date 2011-07-14
  *
  * Implement Book class member functions
- * g++ -lboost_date_time -Wall -o../bin/"%e" "%f"
- * the "-lboost_date_time" is important to enable compilation with boost
- * date_time library
+ * this is part of the solution to exercise 9.09 PPP
+ * use -lboost_date_time with g++
+ * it is required to enable compilation with boost date_time library
  */
 
-//#include "../std_lib_facilities.h"
-#include "Book.h"
 #include <string>
-using std::string;
-
 #include <iostream>
 using std::cin;
 using std::cout;
 using std::endl;
-using std::cerr;
 
 #include <stdexcept>
-using std::exception;
+#include <boost/lexical_cast.hpp> // use to test strings for
+								  // valid type representation
+#include "Book.h"
 
-//#include <ios_base>
-
-// default constructor
+// default constructor /////////////////////////////////////////////////////////
 Book::Book()
-	: isbn13("###"),
-	  title("***"),
-	  author(2,"***"),
-	  is_checkedin(false),
-	  genre(unknown)
+	: isbn13("###"), title("***"), author_fname("***"), author_lname("***"),
+	  copyright_date(), genre(unknown), is_checkedin(false)
 {
-	std::cout << "DEBUG: Book(), default constructor\n";
+	std::cout << "DEBUG: Book::Book()\n";
 }
 
-// member function definitions
+// member function definitions /////////////////////////////////////////////////
 
-// non-modifying operations
+// non-modifying operations ////////////////////////////////////////////////////
 /**
  * Display state of book
  */
 void Book::print()
 {
-	cout << "DEBUG: print()\n";
-	cout << "Title:\t\t" <<get_title()<<endl<<
-			"Author:\t\t" <<get_author()<<endl<<
-			"Genre:\t\t" <<genre_tostring()<<endl<<
-			"ISBN:\t\t" <<get_isbn()<<endl<<
-			"Copyright:\t" <<get_copyright()<<endl<<
-			"Checked in:\t" <<(is_bookin()? "Yes":"No")<<endl;
+	cout << "DEBUG: Book::print()\n";
+	cout << "Title:\t\t" << get_title()<<endl<<
+			"Author:\t\t" << get_author()<<endl<<
+			"Genre:\t\t" << genre_tostring()<<endl<<
+			"ISBN:\t\t" << get_isbn()<<endl<<
+			"Copyright:\t" << get_copyright_date()<<endl<<
+			"Checked in:\t" << (is_bookin()? "Yes":"No")<<endl;
 	return;
 }
 
-// modifying operations
+std::string Book::get_copyright_date() const
+{
+	return boost::gregorian::to_simple_string(copyright_date);
+}
+
+// modifying operations ///////////////////////////////////////////////////////
+
+// use to initialise all class parameters
+// return true if set parameters correctly
+void Book::Init(std::string isbn, std::string title,
+			std::string fn, std::string ln,
+			Genre g, std::string cpy_date, Book_status s)
+{
+	cout << "DEBUG: Book::Init()\n";
+	set_isbn(isbn);
+	set_title(title);
+	set_author(fn, ln);
+	set_genre(g);
+	set_copyright_date(cpy_date);
+	if (s == in)
+		checkin();
+	else
+		checkout();
+}
+
 /**
  * read input data and set isbn number for book
  */
 void Book::read_isbn()
 {
+	cout << "DEBUG: Book::read_isbn()\n";
 	bool is_isbn = false; // true when isbn is valid
-	string str_in; // input from user
-	cout << "DEBUG: read_isbn()\n";
+	std::string str_in; // input from user
 
 	while (is_isbn==false) {
 		cout << "Enter ISBN for book: ";
 		getline(cin, str_in);
-		//cin >> str_in;
-		cout << "str_in.size(): " <<str_in.size()<<endl;
-		if (islong(str_in)) {
-			if (str_in.size()==isbn13_length) {
-				isbn13 = str_in;
-				is_isbn = true;
-			}
-			else
-				cout << "Error: ISBN must be " <<isbn13_length
-					 << " digits. Please try again.\n";
+		if(set_isbn(str_in)) {;
+			is_isbn = true;
 		}
-		else {
-			cout << "Error: Invalid isbn. Please try again.\n";
-		}
+		else
+			cout << "Please try again.\n";
 	}
+}
+
+// set isbn number, checking that n is 13 characters long
+bool Book::set_isbn(std::string n)
+{
+	cout << "DEBUG: Book::set_isbn()\n";
+	if (islong(n)) {
+		if (n.size()==isbn13_length) {
+			isbn13 = n;
+			return true;
+		}
+		else
+			cout << "ERROR: isbn must be " << isbn13_length << " digits.\n";
+	}
+	else
+		cout << "ERROR: Invalid isbn number.\n";
+	return false;
 }
 
 /**
@@ -89,8 +113,8 @@ void Book::read_isbn()
  */
 void Book::read_title()
 {
-	string str_in; // input from user
-	cout << "DEBUG: read_title()\n";
+	cout << "DEBUG: Book::read_title()\n";
+	std::string str_in; // input from user
 
 	cout << "Enter book's title: ";
 	getline(cin, str_in);
@@ -102,17 +126,24 @@ void Book::read_title()
  */
 void Book::read_author()
 {
-	string str_in; // input from user
-	cout << "DEBUG: read_author()\n";
+	cout << "DEBUG: Book::read_author()\n";
+	std::string str_in, first, last; // input from user
 
-	cout << "Enter author's first name: ";
+	cout << "Enter author's first and last names: ";
+	// using getline is good: it doesn't leave unused keystrokes
+	// in a buffer to mess up the next input function
 	getline(cin, str_in);
-	//author.push_back(str_in);
-	author[Book::first]=str_in;
-	cout << "Enter author's last name: ";
-	getline(cin, str_in);
-	//author.push_back(str_in);
-	author[Book::last]=str_in;
+	std::istringstream iss(str_in); // use istringstream to extract names
+	iss >> first >> last;
+	set_author(first, last);
+}
+
+// set author name
+void Book::set_author(std::string fname, std::string lname)
+{
+	cout << "DEBUG: Book::set_author()\n";
+	author_fname = fname;
+	author_lname = lname;
 }
 
 /**
@@ -120,7 +151,8 @@ void Book::read_author()
  */
 void Book::read_genre()
 {
-	string str_in; // input from user
+	cout << "DEBUG: Book::read_genre()\n";
+	std::string str_in; // input from user
 	bool is_genre = false; // true if user enters a valid genre
 	while (is_genre == false) {
 		cout << "0.\tFiction\n"
@@ -172,30 +204,41 @@ void Book::read_genre()
  */
 void Book::read_copyright()
 {
+	cout << "DEBUG: Book::read_copyright()\n";
 	bool is_date = false; // true when user enters a valid date
-	string str_in; // input from user
-	cout << "DEBUG: read_copyright()\n";
+	std::string str_in; // input from user
 
-	while (is_date== false) {
+	while (is_date == false) {
 		cout << "Enter copyright date (yyyy/mm/dd): ";
 		getline(cin, str_in);
-		try {
-			copyright = from_string(str_in);
-			is_date = true; // if no errors thrown by from_string()h, date is good
-		} //out_of_range
-		catch (exception& e) {
-			cerr << "date error: " << e.what() << endl;
-			//return 1;
-		} // exception
+		if (set_copyright_date(str_in))
+			is_date=true;
+		else {
+			cout << "Please try again.\n";
+		}
+	}
+}
+
+bool Book::set_copyright_date(std::string date)
+{
+	cout << "DEBUG: Book::set_copyright_date()\n";
+	try {
+		copyright_date = boost::gregorian::from_string(date);
+		return true; // if no errors thrown by from_string(), date is good
+	}
+	catch (std::exception& e) {
+		std::cerr << "ERROR: " << e.what() << endl;
+		return false;
 	}
 }
 
 /**
  * return the genre of the book as a string
  */
-string Book::genre_tostring() const
+std::string Book::genre_tostring() const
 {
-	string genre_str;
+	cout << "DEBUG: Book::genre_tostring()\n";
+	std::string genre_str;
 
 	switch (get_genre()) {
 	case fiction:
@@ -214,7 +257,7 @@ string Book::genre_tostring() const
 		genre_str="Children";
 		break;
 	case unknown:
-		genre_str="***";
+		genre_str="Unknown";
 		break;
 	default:
 		cout << "Error: Not a valid genre\n";
@@ -228,16 +271,14 @@ string Book::genre_tostring() const
  * @param data
  * returns true if DATA represents a valid integer.
  */
-bool isint(string data)
+bool isint(std::string data)
 {
-	using boost::lexical_cast;
-	using boost::bad_lexical_cast;
 	bool is_int = true;
 	try
 	{
-		lexical_cast<int>(data);
+		boost::lexical_cast<int>(data);
 	}
-	catch (bad_lexical_cast &)
+	catch (boost::bad_lexical_cast &)
 	{
 		cout << "data is not a valid integer\n";
 		is_int = false;
@@ -246,20 +287,19 @@ bool isint(string data)
 }
 
 /**
- * @func islong()
+ * islong()
  * @param data
- * returns true if DATA represents a valid integer.
+ * returns true if DATA represents a valid long integer.
  */
-bool islong(string data)
+bool islong(std::string data)
 {
-	using boost::lexical_cast;
-	using boost::bad_lexical_cast;
+	cout << "DEBUG: Book::islong()\n";
 	bool is_long = true;
 	try
 	{
-		lexical_cast<long>(data);
+		boost::lexical_cast<long>(data);
 	}
-	catch (bad_lexical_cast &)
+	catch (boost::bad_lexical_cast &)
 	{
 		cout << "data is not a valid long integer\n";
 		is_long = false;
@@ -275,16 +315,31 @@ bool operator==(const Book& a, const Book& b)
 
 bool operator!=(const Book& a, const Book& b)
 {
-	//return !(a.get_isbn()==b.get_isbn());
 	return !(a==b);
 }
 
 // Have a << print out the title, author, and ISBN on separate lines.
-ostream& operator<<(ostream& os, const Book& book)
+std::ostream& operator<<(std::ostream& os, const Book& book)
 {
-	cout << "Title:\t"  << book.get_title() << endl
-		 << "Author:\t" << book.get_author() << endl
-		 << "Genre:\t"  << book.genre_tostring() << endl
-		 << "ISBN:\t"   << book.get_isbn() << endl;
+	cout << "Title:\t\t"  << book.get_title() << endl
+		 << "Author:\t\t" << book.get_author() << endl
+		 << "Copyright date: " << book.get_copyright_date() << endl
+		 << "Genre:\t\t"  << book.genre_tostring() << endl
+		 << "ISBN:\t\t"   << book.get_isbn() << endl
+		 << "Checked in:\t" << (book.is_bookin() ? "Yes":"No") << endl;
 	return os;
+}
+
+// check book out of a collection
+void Book::checkout()
+{
+	cout << "DEBUG: Book::checkout()\n";
+	is_checkedin=false;
+}
+
+// check book into a collection
+void Book::checkin()
+{
+	cout << "DEBUG: Book::checkin()\n";
+	is_checkedin=true;
 }

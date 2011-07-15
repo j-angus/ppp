@@ -10,10 +10,10 @@ BINDIR = ~/swdev/c++/ppp/bin
 PROG = ch09ex09
 # SRC = Patron
 
-$(PROG): $(PROG).o Book.o Patron.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BINDIR)/$(PROG) $(PROG).o Book.o Patron.o
+$(PROG): $(PROG).o Book.o Patron.o Library.o
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BINDIR)/$(PROG) $(PROG).o Book.o Patron.o Library.o
 
-$(PROG).o: $(PROG).cpp Book.h Patron.h
+$(PROG).o: $(PROG).cpp Book.h Patron.h Library.h
 	$(CC) $(CFLAGS) -c $(PROG).cpp
 
 Book.o: Book.cpp Book.h
@@ -21,3 +21,6 @@ Book.o: Book.cpp Book.h
 
 Patron.o: Patron.cpp Patron.h
 	$(CC) $(CFLAGS) -c Patron.cpp
+
+Library.o: Library.cpp Library.h
+	$(CC) $(CFLAGS) -c Library.cpp
