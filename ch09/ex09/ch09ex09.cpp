@@ -35,11 +35,11 @@ using std::endl;
 #include "Patron.h"
 #include "Library.h"
 
-// get Book info from user
+// create a Book without user input
 Book create_book(); // returns a Book
 
-// get Patron info from user
-Patron* get_patron_info(); // returns a Patron
+// create a Patron without user input
+Patron create_patron(); // returns a Patron
 
 // test drive Book, Patron and Library classes
 int main(void)
@@ -51,58 +51,14 @@ int main(void)
 	Book bk1;
 	Patron ptrn1;
 	Library lib;
-/*
-	cout << "Before adding any data to bk1:\n";
-	bk1.print();
-	// add data to bk1
-	bk1.read_isbn();
-	bk1.read_title();
-	bk1.read_author();
-	bk1.read_genre();
-	bk1.read_copyright();
-	bk1.checkin();
 
-	cout << "After adding data to bk1:\n";
-	cout << bk1;
-
-	cout << "Before adding data to ptrn1:\n";
-	cout << ptrn1;
-
-	// add data to ptrn1
-	cout << "Enter patron name: ";
-	getline(cin, str_in);
-	std::istringstream iss(str_in);
-	std::string fn, ln;
-	iss >> fn >> ln;
-	ptrn1.set_name(fn, ln);
-	iss.clear();
-	cout << "Enter the card number: ";
-	int cnum; // the card number input
-	std::getline(std::cin, str_in);
-	iss.str(str_in);
-	iss >> cnum;
-	ptrn1.set_card_num(cnum);
-
-	cout << "After adding data to ptrn1:\n";
-	cout << ptrn1;
-
-	cout << "Before adding any data to library:\n";
-	lib.list_books();
-	lib.list_patrons();
-
-	// add data to lib
-	lib.add_patron(ptrn1);
-	lib.add_book(bk1);
-
-	cout << "After adding data to library:\n";
-	lib.list_book_titles();
-	lib.list_patrons();
-*/
-	// add a few books to lib
-	for (int i=0; i<20; ++i)
+	for (int i=0; i<20; ++i) {
 		lib.add_book(create_book());
+		lib.add_patron(create_patron());
+	}
 	cout << "After adding a few books to library:\n";
 	lib.list_books();
+	lib.list_patrons();
 
 	}
 	catch (std::runtime_error& e) {
@@ -124,10 +80,12 @@ Book create_book()
 	std::string fname = "Author";
 	std::string lname;
 	static Book::Genre g = Book::fiction;
+	// use stringstream to convert integers to strings
 	std::stringstream sstream(std::stringstream::in | std::stringstream::out);
+	namespace bg = boost::gregorian; // for boost date access
 	// copyright date of book, set to todays date
-	static boost::gregorian::date cpy_date(boost::gregorian::day_clock::local_day());
-	static boost::gregorian::date_duration dd(1);
+	static bg::date cpy_date(bg::day_clock::local_day());
+	static bg::date_duration dd(6); // date step size = 6 days
 	std::string str_cpy_date;
 	static Book b;
 
@@ -164,36 +122,37 @@ Book create_book()
 
 	// set date
 	cpy_date = cpy_date + dd;
-	str_cpy_date = boost::gregorian::to_simple_string(cpy_date);
+	str_cpy_date = bg::to_simple_string(cpy_date);
 
 	b.Init(s_isbn, bk_title, fname, lname, g, str_cpy_date, Book::in);
 
 	return b;
 }
 
-// get Patron info from user
-// returns a Patron
-Patron* get_patron_info()
+// create a Patron without user input
+Patron create_patron()
 {
-	cout << "DEBUG: get_patron_info()\n";
+	cout << "DEBUG: create_patron()\n";
 	static Patron p;
-	std::string str_in;
+	static int pnum = 100; // number of Patron
+	static std::string fname = "Patron";
+	std::string lname = "Last_";
+	std::stringstream sstream(std::stringstream::in | std::stringstream::out);
+	static int cnum = 0; // card number
+	double fee = 0.0;
 
-	cout << "Enter patron name: ";
-	getline(cin, str_in);
-	std::istringstream iss(str_in);
-	std::string fn, ln;
-	iss >> fn >> ln;
-	p.set_name(fn, ln);
-	iss.clear();
-	cout << "Enter the card number: ";
-	int cnum; // the card number input
-	std::getline(std::cin, str_in);
-	iss.str(str_in);
-	iss >> cnum;
-	iss.clear();
-	p.set_card_num(cnum);
-	return &p;
+	// set unique last name
+	sstream << ++pnum;
+	lname += sstream.str();
+
+	// next card number
+	++cnum;
+
+	// alternate whether patron owes any fees;
+	fee = (pnum%3 ? 0.0 : pnum/5.0);
+	p.Init(fname, lname, cnum, fee);
+
+	return p;
 }
 
 /*

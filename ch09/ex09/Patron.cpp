@@ -55,6 +55,14 @@ void Patron::set_fee(double amount)
 	fee = amount;
 }
 
+// set all private data in one function
+void Patron::Init(std::string fn, std::string ln, int cnum, double fee)
+{
+	set_name(fn,ln);
+	set_card_num(cnum);
+	set_fee(fee);
+}
+
 void Patron::print()
 {
 	cout << "DEBUG: Patron::print()\n";

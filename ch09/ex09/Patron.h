@@ -34,6 +34,7 @@ public:
 	void set_last_name(std::string lname);
 	void set_card_num(int num);
 	void set_fee(double amount);
+	void Init(std::string fn, std::string ln, int cnum, double fee);
 
 private:
 	std::string first_name;

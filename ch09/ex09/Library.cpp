@@ -59,10 +59,18 @@ void Library::list_books()
 		cout << book[i] << endl;
 }
 
-// lists patron members of library
-void Library::list_patrons()
+// lists patron names in library
+void Library::list_patron_names()
 {
 	cout << "DEBUG: Library::list_patrons()\n";
 	for (size_t i=0; i<patron.size(); ++i)
 		cout << "Patron #" << i << " " << patron[i].get_name() << endl;
+}
+
+// lists patron names in library
+void Library::list_patrons()
+{
+	cout << "DEBUG: Library::list_patrons()\n";
+	for (size_t i=0; i<patron.size(); ++i)
+		cout << patron[i] << endl;
 }

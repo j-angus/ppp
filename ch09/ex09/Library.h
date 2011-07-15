@@ -53,6 +53,7 @@ public:
 	void checkout_book(); // allows a patron to checkout a book
 	void list_book_titles(); // lists book titles in library collection
 	void list_books(); // lists all books and book info in collection
-	void list_patrons(); // lists patron members of library
+	void list_patron_names(); // lists names of library patrons
+	void list_patrons(); // lists all patrons and patron info in library
 }; // class Library
 #endif // LIBRARY_H
