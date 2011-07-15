@@ -32,28 +32,36 @@
 
 class Library {
 	std::vector<Book> book;
+	size_t bk_index; // an index into the book vector
 	std::vector<Patron> patron;
 	struct Transaction {
-		Transaction() : book(), patron(), trans_date() {}
+		Transaction() : book(), patron(), date() {}
 		Book book;
 		Patron patron;
-		boost::gregorian::date trans_date; // date of transaction
+		boost::gregorian::date date; // date of transaction
 	};
 	std::vector<Transaction> transaction;
-	bool is_member(Patron p); // checks whether patron is member of the library?
-	bool owes_fees(Patron p); // checks whether patron owes fees?
-	bool have_book(Book b); // checks whether book is in the library collection?
-	void store_transaction(Transaction& t);
-	std::vector<std::string> who_owes_fees(); // lists patrons owing fees
+	// private member methods
+	bool have_book(Book& b); // returns true if book is in the library
+	bool is_member(Patron& p); // returns true if patron is member of the library
+	bool owes_fees(Patron& p); // returns true if patron owes fees
+	void store_transaction(Book& b, Patron& p);
+	std::vector<std::string> who_owes_fees(); // creates a vector of
+											  // patrons owing fees
 
 public:
-	Library();
+	// modifying methods
+	Library(); // default contructor
 	void add_patron(Patron p); // adds a member to the library
 	void add_book(Book b); // adds a book to the library collection
-	void checkout_book(Book b, Patron p); // allows a patron to checkout a book
+	void checkout_book(Book& b, Patron& p); // attempts to checkout a book
+	// non-modifying methods
 	void list_book_titles(); // lists book titles in library collection
 	void list_books(); // lists all books and book info in collection
 	void list_patron_names(); // lists names of library patrons
 	void list_patrons(); // lists all patrons and patron info in library
+	void list_transactions(); // lists all transaction records
+	void list_who_owes_fees(); // lists names of patrons owing fees
 }; // class Library
+
 #endif // LIBRARY_H

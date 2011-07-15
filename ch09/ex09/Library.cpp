@@ -14,7 +14,7 @@ using std::endl;
 
 // default constructor
 Library::Library()
-	: book(), patron(), transaction()
+	: book(), bk_index(0), patron(), transaction()
 {
 	std::cout << "DEBUG: Library::Library()\n";
 }
@@ -38,12 +38,31 @@ void Library::add_book(Book b)
 }
 
 // allows a patron to checkout a book
-void Library::checkout_book(Book b, Patron p)
+void Library::checkout_book(Book& b, Patron& p)
 {
 	cout << "DEBUG: Library::checkout_book()\n";
+	// need a link to the book in the vector<Book> because need to change
+	// the state of the book in the Library collection, not the random book
+	// being searched for...
+	if (have_book(b))
+		if (book[bk_index].is_bookin())
+			if (is_member(p))
+				if (!owes_fees(p)) {
+					book[bk_index].checkout();
+					store_transaction(book[bk_index],p);
+				}
+				else
+					cout << "Can't loan book - owes fees\n";
+			else
+				cout << "Can't loan book - not a member\n";
+		else
+			cout << "Can't loan book - not checked in\n";
+	else
+		cout << "Can't loan book - not in collection\n";
+
 }
 
-// lists books in library collection
+// lists books titles in library collection
 void Library::list_book_titles()
 {
 	cout << "DEBUG: Library::list_book_titles()\n";
@@ -51,7 +70,7 @@ void Library::list_book_titles()
 		cout << "Book #" << i << " "<< book[i].get_title() << endl;
 }
 
-// lists books in library collection
+// lists all books info in library collection
 void Library::list_books()
 {
 	cout << "DEBUG: Library::list_books()\n";
@@ -67,7 +86,7 @@ void Library::list_patron_names()
 		cout << "Patron #" << i << " " << patron[i].get_name() << endl;
 }
 
-// lists patron names in library
+// lists all patrons info in library
 void Library::list_patrons()
 {
 	cout << "DEBUG: Library::list_patrons()\n";
@@ -75,42 +94,84 @@ void Library::list_patrons()
 		cout << patron[i] << endl;
 }
 
-// allow a patron to checkout a book
-// if book exists and is not checked out AND
-// patron is a member of the library AND
-// the patron does not owe any fees:
-// allow patron to check out the book, add transacton to transaction vector
-// pnum: patron membership num
-// isbn: isbn number of book
-//void Library::checkout_book(Book b, Patron p)
-//{
-	// is book in library?
-	// is book checked in?
-	// is patron a member of library?
-	// does patron owe any fees?
-	// if all good, create a transaction
-	// book, patron, date
-	// add to transaction vector
-	// find book
-	/*
-	std::stringstream ss(std::stringstream::in | std::stringstream::out);
-	std::string str_isbn; // store converted isbn number
-	bool have_book = false;
-*/
-	// create below functions to allow this logic to occurr,
-	// function prototypes already in Book.h file
-	/* if (have_book(Book b)) // compare isbn values
-	 * 	if (is_member(Patron p)) // compare card num values
-	 * 		if (!owes_fees(Patron p)) // check p's fees balance
-	 * 			store_transaction(Book b, Patron p))
-	 */
+// private member methods
 
-/*
-	//ss << isbn;
-	//ss >> str_isbn;
-	for (size_t i = 0; i < book.size(); ++i) {
-		if (book[i].get_isbn() == str_isbn) {
+// returns true if book is in the library
+bool Library::have_book(Book& b)
+{
+	cout << "DEBUG: Library::have_book()\n";
+	for (size_t i=0; i<book.size(); ++i)
+		if (book[i]==b) {
+			bk_index = i;
+			return true;
 		}
+	return false;
+}
+
+// returns true if patron is member of the library
+bool Library::is_member(Patron& p)
+{
+	cout << "DEBUG: Library::is_member()\n";
+	//cout << " p.get_name()): " << p.get_name() << endl;
+	for (size_t i=0; i<patron.size(); ++i) {
+		//cout << " patron[i].get_name(): " << patron[i].get_name() << endl;
+		if (patron[i]==p)
+			return true;
 	}
-*/
-//}
+	return false;
+}
+
+// returns true if patron owes fees
+bool Library::owes_fees(Patron& p)
+{
+	cout << "DEBUG: Library::owes_fees()\n";
+	return p.owes_fees();
+}
+
+// stores transaction details
+void Library::store_transaction(Book& b, Patron& p)
+{
+	cout << "DEBUG: Library::store_transaction()\n";
+	Transaction t;
+	t.book = b;
+	t.patron = p;
+	namespace bg = boost::gregorian; // for boost date access
+	// transaction date of book, set to today's date
+	t.date = bg::date(bg::day_clock::local_day());
+	transaction.push_back(t);
+}
+
+// lists all transaction records
+void Library::list_transactions()
+{
+	cout << "DEBUG: Library::list_transactions()\n";
+	for (size_t i=0; i<transaction.size(); ++i)
+		cout << "Transaction #" << i << endl
+			  << "Transaction Date: "
+			  << boost::gregorian::to_simple_string(transaction[i].date) << endl
+			  << transaction[i].book << endl
+			  << transaction[i].patron << endl;
+
+}
+
+// creates a vector of patrons owing fees
+std::vector<std::string> Library::who_owes_fees()
+{
+	cout << "DEBUG: Library::who_owes_fees()\n";
+	std::vector<std::string> owes_fees; // store patrons owing fees
+
+	for (size_t i=0; i<patron.size(); ++i)
+		if (patron[i].owes_fees())
+			owes_fees.push_back(patron[i].get_name());
+	return owes_fees;
+}
+
+// lists names of patrons owing fees
+void Library::list_who_owes_fees()
+{
+	cout << "DEBUG: Library::list_who_owes_fees()\n";
+	std::vector<std::string> owes_fees = who_owes_fees();
+
+	for (size_t i=0; i<owes_fees.size(); ++i)
+		cout << owes_fees[i] << endl;
+}

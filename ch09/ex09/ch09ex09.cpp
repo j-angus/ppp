@@ -21,6 +21,8 @@
  */
 
 #include <stdexcept>
+#include <vector>
+using std::vector;
 #include <string>
 #include <iostream>
 using std::cin;
@@ -36,10 +38,10 @@ using std::endl;
 #include "Library.h"
 
 // create a Book without user input
-Book create_book(); // returns a Book
+Book& create_book(Book & b); // returns a Book
 
 // create a Patron without user input
-Patron create_patron(); // returns a Patron
+Patron& create_patron(Patron& p); // returns a Patron
 
 // test drive Book, Patron and Library classes
 int main(void)
@@ -48,17 +50,44 @@ int main(void)
 	std::string str_in; // hold user input
 
 	try {
-	Book bk1;
-	Patron ptrn1;
-	Library lib;
+	Book my_book;
+	Patron my_patron;
+	Library my_library;
+	vector<Book> vbook;
+	vector<Patron> vpatron;
 
-	for (int i=0; i<20; ++i) {
-		lib.add_book(create_book());
-		lib.add_patron(create_patron());
+	// create a bunch of books and patrons
+	for (int i=0; i<97; ++i) {
+		vbook.push_back(create_book(my_book));
+		vpatron.push_back(create_patron(my_patron));
 	}
+
+	// add a few books and patrons to library
+	size_t i=0;
+	size_t j=vbook.size()-1;
+	for (; i<vbook.size(); ++i, --j) {
+		if (i%3)
+			my_library.add_book(vbook[i]);
+		if (i%4)
+			my_library.add_patron(vpatron[j]);
+	}
+
+	// list books and members of library
 	cout << "After adding a few books to library:\n";
-	lib.list_books();
-	lib.list_patrons();
+	my_library.list_books();
+	my_library.list_patrons();
+
+	// attempt to check out a bunch of books to a bunch of patrons
+	i=0;
+	j=vbook.size()-1;
+	for (;i<vbook.size(); ++i, --j) {
+		my_library.checkout_book(vbook[i],vpatron[j]);
+	}
+
+	my_library.list_transactions(); // lists successful checkouts
+	my_library.list_who_owes_fees();
+	my_library.list_books(); // should show that some books are checked in
+							 // and others checked out (successful transactions)
 
 	}
 	catch (std::runtime_error& e) {
@@ -69,14 +98,15 @@ int main(void)
 	return 0;
 }
 
-// create a Book without user input, just using this to test lib funcitons
-Book create_book()
+// create a Book without user input
+// just using this to test Library class
+Book& create_book(Book & b)
 {
 	cout << "DEBUG: get_book_info()\n";
-	static long l_isbn = 1111111111110;
-	std::string s_isbn;
-	static int title_num = 0;
-	std::string bk_title = "Title_";
+	static long l_isbn = 1111111111110; // initial isbn for series of Books
+	std::string s_isbn; // isbn is stored as a string within Book
+	std::string bk_title = "Title_"; // prefix of Book title
+	static int title_num = 0; // initial Book title number for series of Books
 	std::string fname = "Author";
 	std::string lname;
 	static Book::Genre g = Book::fiction;
@@ -86,10 +116,9 @@ Book create_book()
 	// copyright date of book, set to todays date
 	static bg::date cpy_date(bg::day_clock::local_day());
 	static bg::date_duration dd(6); // date step size = 6 days
-	std::string str_cpy_date;
-	static Book b;
+	std::string str_cpy_date; // store boost::gregorian::date as a string
 
-	// setup the isbn no.
+	// setup the isbn no. as a string ready to store in Book
 	++l_isbn;
 	++title_num;
 	sstream << l_isbn;
@@ -104,9 +133,10 @@ Book create_book()
 	// setup author name
 	lname = "Last_" + sstream.str();
 	sstream.clear();
-	// set genre
-	if (g == Book::children) {
-		g = Book::fiction;
+
+	// setup the genre
+	if (g == Book::children) { //last in enum Genre
+		g = Book::fiction; // first in enum Genre
 	}
 	else {
 		for (int i=Book::nonfiction; i<=Book::children; ++i) {
@@ -120,7 +150,7 @@ Book create_book()
 		}
 	}
 
-	// set date
+	// setup date, increment by dd
 	cpy_date = cpy_date + dd;
 	str_cpy_date = bg::to_simple_string(cpy_date);
 
@@ -130,10 +160,10 @@ Book create_book()
 }
 
 // create a Patron without user input
-Patron create_patron()
+// just using this to test Library class
+Patron& create_patron(Patron & p)
 {
 	cout << "DEBUG: create_patron()\n";
-	static Patron p;
 	static int pnum = 100; // number of Patron
 	static std::string fname = "Patron";
 	std::string lname = "Last_";
@@ -154,11 +184,3 @@ Patron create_patron()
 
 	return p;
 }
-
-/*
-// error() simply disguises throws:
-inline void error(const std::string& s)
-{
-	throw runtime_error(s);
-}
-*/

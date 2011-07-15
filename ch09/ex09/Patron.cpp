@@ -68,7 +68,7 @@ void Patron::print()
 	cout << "DEBUG: Patron::print()\n";
 	cout.setf(std::ios::fixed, std::ios::floatfield);
 	cout.setf(std::ios::showpoint);
-	cout.precision(2);
+	cout.precision(2); // number of places after decimal point
 	cout << "Patron info:\n"
 		 << first_name + " " + last_name << endl
 		 << "card number: " << card_num << endl
@@ -76,12 +76,25 @@ void Patron::print()
 }
 
 // overloaded operators
+
+// logic operators - compare equality by card number
+bool operator==(const Patron& a, const Patron& b)
+{
+	return a.get_card_num()==b.get_card_num();
+}
+
+bool operator!=(const Patron& a, const Patron& b)
+{
+	return !(a==b);
+}
+
+// insertion operator prints out Patron details on separate lines
 std::ostream& operator<<(std::ostream& os, const Patron& patron)
 {
 	cout.setf(std::ios::fixed, std::ios::floatfield);
 	cout.setf(std::ios::showpoint);
 	cout.precision(2);
-	cout << "Patron info:\n"
+	cout << "Patron Information --\n"
 		 << "Name:\t\t" << patron.get_name() << endl
 		 << "Card number:\t" << patron.get_card_num() << endl
 		 << "Fees owing:\t$" << patron.get_fee() << endl;

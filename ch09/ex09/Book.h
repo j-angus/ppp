@@ -22,37 +22,36 @@
 
 class Book {
 public:
-
-	// non-modifying operations
-	Book(); // default constructor
 	enum Genre {fiction, nonfiction, periodical, biography, children, unknown};
 	enum Book_status {out, in};
-	std::string get_isbn() const {return isbn13;}
-	std::string get_title() const {return title;}
-	std::string get_author() const {return author_fname + " " + author_lname;}
-	Genre get_genre() const {return genre;}
-	std::string genre_tostring() const; // return the genre as a string
-	std::string get_copyright_date() const;
-	bool is_bookin() const {return is_checkedin;}
-	void print();
-	// initialise all parameters:
+	Book(); // default constructor
+	// Init: initialise all parameters:
 	void Init(std::string isbn, std::string title,
 			std::string fn, std::string ln,
 			Genre g, std::string cpy_date, Book_status s);
+	// non-modifying methods
+	std::string get_isbn() const {return isbn13;}
+	std::string get_title() const {return title;}
+	std::string get_author() const {return author_fname + " " + author_lname;}
+	std::string get_copyright_date() const;
+	Genre get_genre() const {return genre;}
+	std::string genre_tostring() const; // return the genre as a string
+	bool is_bookin() const {return is_checkedin;}
+	void print();
 
-	// modifying operations
+	// modifying methods
 	void read_isbn();
 	bool set_isbn(std::string n);
 	void read_title();
-	void set_title(std::string t) {cout << "DEBUG: Book::set_title()\n";title=t;}
+	void set_title(std::string t) {title=t; cout << "DEBUG: Book::set_title()\n";}
 	void read_author();
 	void set_author(std::string fname, std::string lname);
-	void read_genre();
-	void set_genre(Genre g) {cout << "DEBUG: Book::set_genre()\n";genre = g;}
 	void read_copyright();
 	bool set_copyright_date(std::string date);
-	void checkout();
+	void read_genre();
+	void set_genre(Genre g) {genre = g; cout << "DEBUG: Book::set_genre()\n";}
 	void checkin();
+	void checkout();
 
 private:
 	std::string isbn13; // size must be 13 char long, no more, no less

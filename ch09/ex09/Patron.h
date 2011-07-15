@@ -21,17 +21,17 @@ class Patron
 {
 public:
 	Patron(); // default constructor
-	// non-modifying functions
-	bool has_fee_owing() const {return (fee ? true : false);}
+	// non-modifying methods
 	std::string get_name() const {return first_name + " " + last_name;}
 	int get_card_num() const {return card_num;}
 	double get_fee() const {return fee;}
+	bool owes_fees() const {return (fee ? true : false);}
 	void print();
 
-	// modifying functions
-	void set_name(std::string fname, std::string lname);
+	// modifying methods
 	void set_first_name(std::string fname);
 	void set_last_name(std::string lname);
+	void set_name(std::string fname, std::string lname);
 	void set_card_num(int num);
 	void set_fee(double amount);
 	void Init(std::string fn, std::string ln, int cnum, double fee);
@@ -45,5 +45,8 @@ private:
 }; // class Patron
 
 // overloaded operators
+bool operator==(const Patron& a, const Patron& b);
+bool operator!=(const Patron& a, const Patron& b);
 std::ostream& operator<<(std::ostream& os, const Patron& patron);
+
 #endif // PATRON_H

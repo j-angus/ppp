@@ -237,7 +237,7 @@ bool Book::set_copyright_date(std::string date)
  */
 std::string Book::genre_tostring() const
 {
-	cout << "DEBUG: Book::genre_tostring()\n";
+	//cout << "DEBUG: Book::genre_tostring()\n";
 	std::string genre_str;
 
 	switch (get_genre()) {
@@ -318,14 +318,15 @@ bool operator!=(const Book& a, const Book& b)
 	return !(a==b);
 }
 
-// Have a << print out the title, author, and ISBN on separate lines.
+// insertion operator prints out Book details on separate lines
 std::ostream& operator<<(std::ostream& os, const Book& book)
 {
-	cout << "Title:\t\t"  << book.get_title() << endl
-		 << "Author:\t\t" << book.get_author() << endl
-		 << "Copyright date: " << book.get_copyright_date() << endl
-		 << "Genre:\t\t"  << book.genre_tostring() << endl
-		 << "ISBN:\t\t"   << book.get_isbn() << endl
+	cout << "Book Information --\n"
+		 << "Title:\t\t"   << book.get_title() << endl
+		 << "Author:\t\t"  << book.get_author() << endl
+		 << "Copyright:\t" << book.get_copyright_date() << endl
+		 << "Genre:\t\t"   << book.genre_tostring() << endl
+		 << "ISBN:\t\t"    << book.get_isbn() << endl
 		 << "Checked in:\t" << (book.is_bookin() ? "Yes":"No") << endl;
 	return os;
 }
