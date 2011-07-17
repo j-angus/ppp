@@ -28,6 +28,7 @@ using std::vector;
 using std::cin;
 using std::cout;
 using std::endl;
+
 #include <sstream>
 
 #include <boost/date_time/gregorian/gregorian.hpp> // for date handling
