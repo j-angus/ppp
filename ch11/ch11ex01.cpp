@@ -30,68 +30,75 @@ int main(int argc, char** argv)
 	vector<string> lower_line; // hold lower case coonverted lines
 	string str_in; // data read into str_in
 	ifstream fin; // our input file stream fror reading data
-	string fin_name = "input"; // default name for input file
-	size_t read_buf = 80; // amount of char to read at one time
+	const string def_ifname = "input"; // default name for input file
+	string ifname = def_ifname; // set input filename to default
 	ofstream fout; // our output file stream for writing data
-	string fout_name = "output"; // default name for output file
+	const string def_ofname = "output"; // default name for output file
+	string ofname = def_ofname; // set output filename to default
 
 	// open input file
 	if (argc>1) // use first command-line arg as input filename
-		fin_name=argv[1];
-	fin.open(fin_name.c_str());
+		ifname=argv[1];
+	fin.open(ifname.c_str());
 	if (!fin) {
-		cout << "ERROR: Unable to open file, \"" << fin_name << "\"\n";
-		cout << "Trying default \"input\"...\n";
-		fin_name="input";
-		fin.clear();
-		fin.open(fin_name.c_str());
-		if (!fin) {
-			cout << "ERROR: Unable to open file, \"" << fin_name << "\"\n";
-			exit(EXIT_FAILURE);
+		cout << "ERROR: Unable to open file, \"" << ifname << "\"\n";
+		if (ifname != def_ifname) {
+			ifname=def_ifname;
+			cout << "Trying default input file: \"" << ifname << "\"...\n";
+			fin.clear();
+			fin.open(ifname.c_str());
+			if (!fin) {
+				cout << "ERROR: Unable to open file, \"" << ifname << "\"\n";
+				exit(EXIT_FAILURE);
+			}
 		}
 	} // open input file
 
 	// main processing loop, read lines from file, convert to lower case
 	// store converted lines in a vector, ready to write out to output file
+	int line_in = 1; // count lines being read
 	while (fin.good() && !fin.eof()) {
 		getline(fin,str_in); //, read_buf, fin);
 		for (size_t i=0; i<str_in.size(); ++i)
 			str_in[i]=tolower(str_in[i]);
 		lower_line.push_back(str_in);
+		cout << "Reading line no. " << line_in++ << endl;
 	}
 
 	// open output file and write tolower out
-
-	for (size_t i=0; i<lower_line.size(); ++i)
-		cout << "lower_line[" << i << "]: " << lower_line[i] << endl;
-
-	for (int i=0; i<argc; ++i) {
-		args.push_back(argv[i]);
+	cout << "argc: " << argc << endl;
+	if (argc>2) { // use second command-line arg as output filename
+		cout << "argv[2]: " << argv[2] << endl;
+		ofname=argv[2];
 	}
-
-	for (unsigned i=0; i<args.size(); ++i) {
-		cout << "args[" << i << "]: " << args[i] << endl;
-		for (unsigned j=0; j<args[i].size(); ++j) {
-			cout << "args["<<i<<"]["<<j<<"]: " << args[i][j] << endl;
-			str_in.push_back(tolower(args[i][j]));
+	fout.open(ofname.c_str());
+	if (!fout) {
+		cout << "ERROR: Unable to open file, \"" << ofname << "\"\n";
+		if (ofname != def_ofname) {
+			ofname=def_ofname;
+			cout << "Trying default output file: \"" << ofname << "\"...\n";
+			fout.clear();
+			fout.open(ofname.c_str());
+			if (!fout) {
+				cout << "ERROR: Unable to open file, \"" << ofname << "\"\n";
+				exit(EXIT_FAILURE);
+			}
 		}
-		//cout << "temp.size(): " << temp.size() << endl;
-		cout << "temp: " << str_in << endl;
-		str_in = "";
+	} // open output file
+
+	// loop to write converted lines to output file
+	int line_out = 1; // count lines being written
+	for (size_t i=0; i<lower_line.size(); ++i) {
+		fout << lower_line[i] << endl;
+		cout << "Writing line no. " << line_out++ << endl;
+		// check that file is still in good shape for writing
+		if (!fout.good()) {
+			cout << "ERROR: Write error to file, \"" << ofname << "\"\n";
+			cout << "fout status: " << fout.rdstate() << endl;
+		}
 	}
-	//vector<string>::const_iterator it = args.begin();
-	/*
-	while (it!=args.end()) {
-		cout << *it << endl;
-		//temp = *it;
-		//cout << "temp: " << temp << endl;
-		for (size_t i=0; i<it->size(); ++i)
-			temp.push_back(tolower(it->[i]));
-			//cout << (char)tolower(temp[i]);
-		cout << temp << endl;
-		++it;
-	}
-*/
+	// explicitly close output file
+	fout.close();
 
 	return 0;
 }
