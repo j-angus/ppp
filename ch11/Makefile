@@ -3,7 +3,7 @@
 # make PROG=%e
 # in geany
 CC = g++
-CFLAGS = -g -Wall -Wextra -Weffc++
+CFLAGS = -gdwarf-2 -Wall -Wextra -Weffc++
 BINDIR = ~/swdev/c++/ppp/bin
 PROG = filename
 

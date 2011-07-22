@@ -1,14 +1,21 @@
 /**
  * @author Jason Angus
- * @file ch11ex02.cpp
- * @date 2011-07-20
+ * @file ch11ex03.cpp
+ * @date 2011-07-22
  *
- * solution to exercise 11.02 in PPP
+ * solution to exercise 11.03 in PPP
  * CHAPTER 11 • CUSTOMIZING INPUT AND OUTPUT
- * 2. Write a program that removes all vowels from a file ("disemwowels").
- * For example, Once upon a time! becomes nc pn tm!. Surprisingly often, the
- * result is still readable; try it on your friends.
+ *
+ * 3. Write a program that prompts the user to enter several integers in any
+ * combination of octal, decimal , or hexadecimal, using thc 0 and 0x base
+ * suffixes; interprets the numbers correctly; and converts them to decimal
+ * form. Then your program should output the values in properly spaced columns
+ * like this:
+ * 0x4		hexadecimal	converts to		67		decimal
+ * 0123		octal		converts to		83		decimal
+ * 65		decimal		converts to 	65		decimal
  */
+
 
 #include <vector>
 using std::vector;
@@ -53,19 +60,17 @@ int main(int argc, char** argv)
 	string ofname; // output filename
 
 
-	if (argc>2) {
+	if (argc>1) {
 		// get command-line args
 		 for (int i=1; i<argc; ++i)
 			args.push_back(argv[i]);
-		ifname = args[0];
-		ofname = args[1];
 	}
 	else {
-		cout << "ERROR: no filenames given.\n";
+		cout << "ERROR: no filename given.\n";
 		exit(EXIT_FAILURE);
 	}
 	// open input file
-	// ifname = args[0];
+	ifname = args[0];
 	open_ifile(fin, ifname.c_str());
 	if (!fin) {
 		cout << "ERROR: Unable to open file, \"" << ifname << "\"\n";
@@ -89,7 +94,7 @@ int main(int argc, char** argv)
 	}
 
 	// open output file
-	// ofname = args[0];
+	ofname = args[0];
 	open_ofile(fout, ofname.c_str());
 	if (!fout) {
 		cout << "ERROR: Unable to open file, \"" << ofname << "\"\n";
@@ -159,7 +164,7 @@ string& remove_vowels(string& line)
 		case 'u':
 			it = line.begin()+i;
 			line.erase(it);
-			//break;
+			break;
 		}
 	}
 	return line;
