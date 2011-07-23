@@ -64,8 +64,8 @@ int main(int argc, char** argv)
 		cout << "ERROR: no filenames given.\n";
 		exit(EXIT_FAILURE);
 	}
+
 	// open input file
-	// ifname = args[0];
 	open_ifile(fin, ifname.c_str());
 	if (!fin) {
 		cout << "ERROR: Unable to open file, \"" << ifname << "\"\n";
@@ -76,10 +76,17 @@ int main(int argc, char** argv)
 	// file reading loop.
 	// store  lines in a vector, ready to process
 	int line_in = 1; // count lines being read
-
 	while (fin.good() && !fin.eof()) {
 		getline(fin,str_in);
-		line_buf.push_back(str_in); // load our vector with lines from file
+		if (!fin.eof() || (str_in.size()>0)) { // we will read the last line
+											   // of a file that is not
+											   // newline terminated, as well as
+											   // not reading an extra empty
+											   // line at the end of a file
+			line_buf.push_back(str_in); // loads vector with line from file
+			cout << "Reading line no. " << line_in++ << endl;
+			cout << "str_in size: " << str_in.size() << endl;
+		}
 	}
 	fin.close();
 
@@ -101,7 +108,9 @@ int main(int argc, char** argv)
 	int line_out = 1; // count lines being written
 	for (size_t i=0; i<line_buf.size(); ++i) {
 		fout << line_buf[i] << endl;
+
 		cout << "Writing line no. " << line_out++ << endl;
+		cout << "line_buf[" << i << "] size: " << line_buf[i].size() << endl;
 		// check that file is still in good shape for writing
 		if (!fout.good()) {
 			cout << "ERROR: Write to file failed, \"" << ofname << "\"\n";
@@ -148,10 +157,11 @@ fstream& open_iofile(fstream& iofs, const string& fname)
 // remove vowels from line
 string& remove_vowels(string& line)
 {
-	string::iterator it = line.begin();
-
-	for (size_t i=0;i < line.size(); ++i) {
-		switch ((char)tolower(line[i])) {
+	string::iterator it = line.begin(); // we need an iterator for erase
+	char test_char;
+	for (size_t i=0;i < line.size(); ) {
+		test_char = tolower(line[i]);
+		switch (test_char) {
 		case 'a':
 		case 'e':
 		case 'i':
@@ -159,7 +169,11 @@ string& remove_vowels(string& line)
 		case 'u':
 			it = line.begin()+i;
 			line.erase(it);
-			//break;
+			// we don't increment the index when we erase a vowel, the next
+			// char moves into the currently indexed postion
+			break;
+		default:
+			++i; // not a vowel, let's look at the next char
 		}
 	}
 	return line;
