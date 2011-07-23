@@ -8,7 +8,7 @@
  *
  * 3. Write a program that prompts the user to enter several integers in any
  * combination of octal, decimal , or hexadecimal, using thc 0 and 0x base
- * suffixes; interprets the numbers correctly; and converts them to decimal
+ * prefixes; interprets the numbers correctly; and converts them to decimal
  * form. Then your program should output the values in properly spaced columns
  * like this:
  * 0x4		hexadecimal	converts to		67		decimal
@@ -27,145 +27,123 @@ using std::fstream;
 using std::cin;
 using std::cout;
 using std::endl;
+#include <iomanip> // for setw()
 #include <string>
 using std::string;
+#include <sstream>
+using std::stringstream;
 
 #include <cctype> // for tolower()
 #include <cstdlib> // for exit(), EXIT STATUS...
 
-// attempts to open an fstream
-// returned fstream state good if the file is opened successfully
-bool open_ifile(ifstream& ifs, const string& fname);
-bool open_ofile(ofstream& ofs, const string& fname);
-fstream& open_iofile(fstream& iofs, const string& fname);
-string& remove_vowels(string& line); // remove vowels from line
+void show_state(stringstream &ss); // show state of stream
+char int_prefix(string& str); // returns type of string 'd', 'o', or 'x'
 
 /**
- * removes vowels from a text file.
- * expects filename to be passed as a command line argument.
- * modifies the file if it contains vowels and saves it.
+ * displays and classifies user entered integers.
  */
-int main(int argc, char** argv)
+int main()
 {
-	cout << "ch11ex02.cpp, solution to exercise 11.02 in PPP\n";
-	vector<string> args; // lets try to store command line args here...
-	vector<string> line_buf; // temporary string storage
-	vector<string> lower_line; // hold lower case coonverted lines
-	string str_in; // data read into str_in
-	ifstream fin; // our input file stream fror reading data
-	ofstream fout; // our output file stream for writing data
-	fstream iofs; // a file opened for reading and writng
-	string iofname; // input / output filename
-	string ifname; // input filename
-	string ofname; // output filename
+	cout << "ch11ex03.cpp, solution to exercise 11.02 in PPP\n";
+	vector<int> ints_in; // user entered integers
+	vector<char> int_type; // x == hex, o == octal, d == decimal
+	int int_buf; // temp int storage
+	string line_buf;
+	vector<string> lines; // temporary string storage
+	stringstream ss;
 
+	cout << "Enter a few integers in either octal, decimal or hexadecimal: ";
 
-	if (argc>1) {
-		// get command-line args
-		 for (int i=1; i<argc; ++i)
-			args.push_back(argv[i]);
-	}
-	else {
-		cout << "ERROR: no filename given.\n";
-		exit(EXIT_FAILURE);
-	}
-	// open input file
-	ifname = args[0];
-	open_ifile(fin, ifname.c_str());
-	if (!fin) {
-		cout << "ERROR: Unable to open file, \"" << ifname << "\"\n";
-		cout << "fout status: " << fin.rdstate() << endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// file reading loop.
-	// store  lines in a vector, ready to process
-	int line_in = 1; // count lines being read
-
-	while (fin.good() && !fin.eof()) {
-		getline(fin,str_in);
-		line_buf.push_back(str_in); // load our vector with lines from file
-	}
-	fin.close();
-
-	// process line_buf
-	for (size_t i=0; i<line_buf.size(); ++ i) {
-		line_buf[i] = remove_vowels(line_buf[i]);
-	}
-
-	// open output file
-	ofname = args[0];
-	open_ofile(fout, ofname.c_str());
-	if (!fout) {
-		cout << "ERROR: Unable to open file, \"" << ofname << "\"\n";
-		cout << "fout status: " << fout.rdstate() << endl;
-		exit(EXIT_FAILURE);
-	}
-
-	// loop writes lower case converted lines to output file
-	int line_out = 1; // count lines being written
-	for (size_t i=0; i<line_buf.size(); ++i) {
-		fout << line_buf[i] << endl;
-		cout << "Writing line no. " << line_out++ << endl;
-		// check that file is still in good shape for writing
-		if (!fout.good()) {
-			cout << "ERROR: Write to file failed, \"" << ofname << "\"\n";
-			cout << "fout status: " << fout.rdstate() << endl;
+	while (!cin.eof()) { // quit input with ctl-d
+		getline(cin, line_buf);
+		if (!cin.eof()) {
+			ss.str(line_buf);
+			ss.unsetf(std::ios::dec);
+			ss.unsetf(std::ios::oct);
+			ss.unsetf(std::ios::hex);
+			ss >> int_buf;
+			cout << "line_buf: " << line_buf << endl;
+			cout << "int_buf: " << int_buf << endl;
+			show_state(ss);
+			if (!ss.fail()) {
+				ints_in.push_back(int_buf);
+				int_type.push_back(int_prefix(line_buf));
+			}
+			ss.clear();
+			//cout << "After ss.clear:\n";
+			//show_state(ss);
 		}
 	}
-	fout.close();
+
+	for (size_t i=0; i<ints_in.size(); ++i) {
+		switch (int_type[i]) {
+		case 'd':
+			cout << std::setw(8) << std::dec << std::showbase << ints_in[i]
+				<< "\tdecimal\t\tconverts to\t"
+				<< std::noshowbase << std::setw(8) << ints_in[i]
+				<< "\tdecimal\n";
+			break;
+		case 'o':
+			cout << std::setw(8) << std::oct << std::showbase << ints_in[i]
+				<< "\toctal\t\tconverts to\t"
+				<< std::dec << std::noshowbase << std::setw(8) << ints_in[i]
+				<< "\tdecimal\n";
+			break;
+		case 'x':
+			cout << std::setw(8) << std::hex << std::showbase << ints_in[i]
+				<< "\thexidecimal\tconverts to\t"
+				<< std::dec << std::noshowbase << std::setw(8) << ints_in[i]
+				<< "\tdecimal\n";
+			break;
+		default:
+			break;
+		}
+		//cout << "ints_in[" << i << "]: " << ints_in[i] << endl;
+		//cout << "int_type[" << i << "]: " << int_type[i] << endl;
+	}
 
 	return 0;
 } // end main()
 
-// attempts to open an fstream
-// returns true if the file is opened successfully
-bool open_ifile(ifstream& ifs, const string& fname)
+
+// show state ofstream
+void show_state(stringstream &ss)
 {
-	cout << "DEBUG: open_ifile()\n";
-	ifs.close(); // close fstream in case it was already open
-	ifs.clear(); // clear any existing errors
-	// if the open fails, the stream will be in an invalid state
-	ifs.open(fname.c_str()); // open the file we were given
-	return (ifs.good() ? true : false); // true if condition state is good
+	cout << "DEBUG: show_state()\n";
+	if (ss.eof())
+		cout << "eof flag set\n";
+	if (ss.fail())
+		cout << "fail flag set\n";
+	if (ss.bad())
+		cout << "bad flag set\n";
+	if (ss.good())
+		cout << "good flag set\n";
 }
 
-bool open_ofile(ofstream& ofs, const string& fname)
+// returns type of string 'd', 'o', or 'x'
+// assumes that str represents a valid integer
+// we could probably use boost::lexical_cast to check for valid int
+// then return 'z' to indicate invalid integer type
+char int_prefix(string& str)
 {
-	cout << "DEBUG: open_ofile()\n";
-	ofs.close(); // close stream in case it was already open
-	ofs.clear(); // clear any existing errors
-	// if the open fails, the stream will be in an invalid state
-	ofs.open(fname.c_str()); // open the file we were given
-	return (ofs.good() ? true : false); // true if condition state is good
-}
+	size_t found; // location of string found within string
+	const string oct_prefix = "0";
+	const string hexl_prefix = "0x";
+	const string hexu_prefix = "0X";
 
-fstream& open_iofile(fstream& iofs, const string& fname)
-{
-	cout << "DEBUG: open_iofile()\n";
-	iofs.close(); // close fstream in case it was already open
-	iofs.clear(); // clear any existing errors
-	// if the open fails, the stream will be in an invalid state
-	iofs.open(fname.c_str()); // open the file we were given
-	return iofs; // condition state is good if open succeeded
-}
-
-// remove vowels from line
-string& remove_vowels(string& line)
-{
-	string::iterator it = line.begin();
-
-	for (size_t i=0;i < line.size(); ++i) {
-		switch ((char)tolower(line[i])) {
-		case 'a':
-		case 'e':
-		case 'i':
-		case 'o':
-		case 'u':
-			it = line.begin()+i;
-			line.erase(it);
-			break;
-		}
+	found = str.find(hexl_prefix);
+	if (found!=string::npos)
+		return 'x';
+	found = str.find(hexu_prefix);
+	if (found!=string::npos)
+		return 'x';
+	found = str.find(oct_prefix);
+	if (found!=string::npos) { // number conatains a zero,
+							   // but is it the leading character?
+		size_t i=0;
+		while (isspace(str[i])) ++i; // skip leading whitespace
+		if (i==found)
+			return 'o';
 	}
-	return line;
+	return 'd';
 }
