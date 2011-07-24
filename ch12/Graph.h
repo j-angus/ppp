@@ -52,8 +52,8 @@ struct Color {
     char visibility() const { return v; }
     void set_visibility(Transparency vv) { v=vv; }
 private:
-    char v;    // invisible and visible for now
     Fl_Color c;
+    char v;    // invisible and visible for now
 };
 
 //------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ public:
         if (d) push_back(d);
     }
 
-    ~Vector_ref() { for (int i=0; i<owned.size(); ++i) delete owned[i]; }
+    ~Vector_ref() { for (size_t i=0; i<owned.size(); ++i) delete owned[i]; }
 
     void push_back(T& s) { v.push_back(&s); }
     void push_back(T* p) { v.push_back(p); owned.push_back(p); }
@@ -211,8 +211,8 @@ struct Rectangle : Shape {
     int height() const { return h; }
     int width() const { return w; }
 private:
-    int h;    // height
     int w;    // width
+    int h;    // height
 };
 
 //------------------------------------------------------------------------------

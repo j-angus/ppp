@@ -62,7 +62,7 @@ void Shape::draw() const
 
 void Shape::move(int dx, int dy)    // move the shape +=dx and +=dy
 {
-    for (int i = 0; i<points.size(); ++i) {
+    for (size_t i = 0; i<points.size(); ++i) {
         points[i].x+=dx;
         points[i].y+=dy;
     }

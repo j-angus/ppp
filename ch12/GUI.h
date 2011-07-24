@@ -104,17 +104,17 @@ namespace Graph_lib {
 
         void show()                 // show all buttons
         {
-            for (unsigned int i = 0; i<selection.size(); ++i)
+            for (int i = 0; i<selection.size(); ++i)
                 selection[i].show();
         }
         void hide()                 // hide all buttons
         {
-            for (unsigned int i = 0; i<selection.size(); ++i) 
-                selection[i].hide(); 
+            for (int i = 0; i<selection.size(); ++i)
+                selection[i].hide();
         }
         void move(int dx, int dy)   // move all buttons
         {
-            for (unsigned int i = 0; i<selection.size(); ++i) 
+            for (int i = 0; i<selection.size(); ++i)
                 selection[i].move(dx,dy);
         }
 
