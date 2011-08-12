@@ -52,6 +52,7 @@ try
 	win.wait_for_button(); // display
 	// delete checker objects here...
 	for (size_t i=0; i<board.size(); ++i) {
+		cout << "deleting board[" << i << "]\n";
 		delete board[i];
 	}
 }
