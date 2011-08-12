@@ -232,6 +232,33 @@ void Rectangle::draw_lines() const
 }
 
 //------------------------------------------------------------------------------
+
+void Box::draw_lines() const // based on Rectangle, uses rounded cornrers
+{
+    if (fill_color().visibility()) {    // fill
+        fl_color(fill_color().as_int());
+        //fl_rectf(point(0).x,point(0).y,w,h);
+        // drawing stuff here
+        // draw four arcs and four lines
+        // base arc radius on one tenth Box width
+    }
+
+    if (color().visibility()) {    // lines on top of fill
+        fl_color(color().as_int());
+        //fl_rect(point(0).x,point(0).y,w,h);
+        // drawing stuff here
+        fl_arc(point(0).x,point(0).y,r+r,r+r,90,180); // top left
+        fl_arc(point(0).x+w-(r+r),point(0).y,r+r,r+r,0,90); // top right
+        fl_arc(point(0).x+w-(r+r),point(0).y+h-(r+r),r+r,r+r,270,360); // bot right
+        fl_arc(point(0).x,point(0).y+h-(r+r),r+r,r+r,180,270); // bot left
+		fl_line(point(0).x+r,point(0).y, point(0).x+w-r,point(0).y); // top
+		fl_line(point(0).x+r,point(0).y+h, point(0).x+w-r,point(0).y+h); // bot
+		fl_line(point(0).x,point(0).y+r, point(0).x,point(0).y+h-r); // left
+		fl_line(point(0).x+w,point(0).y+r, point(0).x+w,point(0).y+h-r); // right
+    }
+}
+
+//------------------------------------------------------------------------------
 // Already defined in Graph.h
 /*
 Circle::Circle(Point p, int rr)    // center and radius

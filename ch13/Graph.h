@@ -214,6 +214,37 @@ private:
     int w;    // width
     int h;    // height
 };
+//------------------------------------------------------------------------------
+
+struct Box : Shape { // based on Rectangle
+
+    Box(Point xy, int ww, int hh) : w(ww), h(hh)
+    {
+        add(xy);
+        if (h<=0 || w<=0) error("Bad rectangle: non-positive side");
+        (w>h) ? r=h/10 : r=w/10;
+    }
+
+    Box(Point x, Point y) : w(y.x-x.x), h(y.y-x.y)
+    {
+        add(x);
+        if (h<=0 || w<=0) error("Bad rectangle: non-positive width or height");
+    }
+    void draw_lines() const;
+
+    int height() const { return h; }
+    int width() const { return w; }
+private:
+    int w;    // width
+    int h;    // height
+    int r; // radius of corner arcs
+
+/*    int htp1, htp2; // horizontal top points
+    int hbp1, hbp2; // horizontal bottom points
+    int vlp1, vlp2; // vert. left point
+    int vrp1, vrp2;
+*/
+};
 
 //------------------------------------------------------------------------------
 
