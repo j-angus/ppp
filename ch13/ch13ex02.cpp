@@ -79,9 +79,35 @@ try
 	t_2.set_font_size(16);
 	win.attach(t_2);
 
-	Box b(Point(150,200),250,250);
+	Point bp(200,200);
+
+	Box b(Point(200,200),100,250);
 	win.attach(b);
-	b.move(-10,-10);
+	//b.move(100,100);
+	Box b1(Point(200,200),125,250);
+	win.attach(b1);
+	Box b2(Point(200,200),150,250);
+	win.attach(b2);
+	Box b3(Point(200,200),175,250);
+	win.attach(b3);
+	Box b4(Point(200,200),200,250);
+	win.attach(b4);
+	Box b5(Point(200,200),225,250);
+	win.attach(b5);
+	Box b6(Point(200,200),250,250);
+	win.attach(b6);
+	Box b7(Point(200,200),275,250);
+	win.attach(b7);
+	Box b8(Point(200,200),300,250);
+	win.attach(b8);
+	Box b9(bp, 325,250);
+	win.attach(b9);
+	Box b10(bp, 350,250);
+	win.attach(b10);
+	Box b11(bp, 375,250);
+	win.attach(b11);
+	Box b12(bp, 400,250);
+	win.attach(b12);
 
 	win.wait_for_button(); // display
 
