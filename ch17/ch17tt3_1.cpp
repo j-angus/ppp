@@ -34,5 +34,8 @@ int main()
 	cout << "the size of bool is: " << sizeof(bool) <<' '<< sizeof(true) << endl;
 	cout << "the size of double is: " << sizeof(double) <<' '<< sizeof(123.45) << endl;
 
+	vector<int> v(1000);
+	cout << "the size of vector<int> v(1000) is: " << sizeof(v) << endl;
+
 return 0;
 }
