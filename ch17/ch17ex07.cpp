@@ -3,35 +3,39 @@
  * @file ch17ex07.cpp
  * @date 2011-08-28
  *
- * 6. This chapter docs not say what happens when you run out of memory
- *    using new. That's called memory exhaustion. Find out what happens.
- *    You have two obvious alternatives: look for documentation, or write a
- *    program with an infinite loop that allocates but never deallocatcs.
- *    Try both. Approximately how much memory did you manage to allocate before
- *    failing?
+ * 7. Write a program that reads characters from cin into an array that you
+ *    allocate on the free store. Read individual characters until an
+ *    exclamation mark (!) is entered. Do not use a std::string.
+ *    Do not worry about memory exhaustion.
  */
 
-// #include "../std_lib_facilities.h"
+//#include "../std_lib_facilities.h"
 #include <iostream>
 using std::cin;
 using std::cout;
 using std::endl;
 
+#include <string>
+using std::string;
 
 void srcfile_info(); // display basic source file information
 
 int main()
 {
 	srcfile_info();
-	const int block = 4096; // memory allocation chunk size
-	double mem_alloc=0; // counter
-	char* stealer = 0;
+	const int block = 8; // memory allocation chunk size
+	char* ch_array = new char[block]; // store user input
+	int i=0; // index into array
+
+	cout << "please enter some characters, '!' to end: ";
 
 	while (true) {
-		stealer = new char[block];
-		mem_alloc += block;
-		cout << "mem_alloc: " << mem_alloc/(1024*1024*1024) << "GiB\n";
+		cin >> ch_array[i];
+		if (ch_array[i++] == '!')
+			break;
 	}
+	ch_array[i]='\0';
+	cout << "ch_array: " << ch_array << endl;
 
 	return 0;
 }
