@@ -6,14 +6,13 @@
  * 13. Modify the link class from §17.10.1 to hold a value of a struct God.
  *     struct God should have members of type string: name, mythology,
  *     vehicle, and weapon. For example, God (" Zeus", "Greek", "", "lightning")
- *     and God ("Odin", "Norse", "Eight-legged fl ying horse called Sieipner",
- *     '''' ). Write a p rincaUO fun ction that lists gods with their attributes one
-per line. Add a member fun ction add_o rd ered O that places its new ele-
-ment in its correct lexicographical position. Using the Links with the val-
-ues of type God, make a list of gods from three mythologies; then move
-the elements (gods) from that list to three lexicographically ordered lists
-- one for each mythology.
-
+ *     and God ("Odin", "Norse", "Eight-legged flying horse called Sieipner",
+ *     ""). Write a printall() function that lists gods with their attributes
+ *     one per line. Add a member function add_ordered() that places its new
+ *     element in its correct lexicographical position. Using the Links with
+ *     the values of type God, make a list of gods from three mythologies;
+ *     then move the elements (gods) from that list to three lexicographically
+ *     ordered lists - one for each mythology.
  */
 
 //#include "../std_lib_facilities.h"
