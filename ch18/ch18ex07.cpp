@@ -8,7 +8,7 @@
  *    C-style strings as arguments and return a free-store-allocated C-style 
  *    string as the result. Do not use standard library functions or types in 
  *    the implementation. Test these functions with several strings. Be sure to 
- *    free (using delele) all tile memory you allocated from free Store (using 
+ *    free (using delele) all the memory you allocated from free Store (using 
  *    new). Compare the effort involved in this exercise with the effort 
  *    involved for exercises 5 and 6.
  */
@@ -28,29 +28,23 @@ char* my_strdup(const char* str);
 char* my_strstr(const char* s, const char* x);
 int my_strcmp(const char* s1, const char* s2);
 char* cat_dot(const char* s1, const char* s2);
+char* cat_sep(const char* s1, const char* s2, const char* sep);
 
 int main()
 {
 	srcfile_info();
-	const int len=8;
+	char str1[]="string1";
+	char str2[]="string2";
+	char sep[]="_._";
+	char* str3 = cat_dot(str1,str2);
+	cout << "cat_dot(str1,str2): " << str3 << endl;
+	str1[0]='\0';
+	str3 = cat_dot(str1,str2);
+	cout << "cat_dot(str1,str2): " << str3 << endl;
+	str2[0]='\0';
+	str3 = cat_dot(str1,str2);
+	cout << "cat_dot(str1,str2): " << str3 << endl;
 
-	char str1[len]; // test string, not nul terminated
-	for (int i=0; i<len;++i)
-		str1[i]='a';
-	char str2[]="bbbbbbbb";	
-	char* str3;
-	char* str4;
-	str3=(char *)srcfile_info;
-
-	cout << "my_strdup(str1): " << my_strdup(str1) << endl;
-	cout << "my_strdup(str2): " << my_strdup(str2) << endl;
-	cout << "my_strdup(str3): " << my_strdup(str3) << endl;
-
-	str4 = my_strstr(str3, "b");
-	cout << "my_strstr(str3, \"b\")" << ((str4)?str4:"") << endl;
-	cout << endl;
-	
-	make_str();
 	return 0;
 }
 
@@ -59,7 +53,50 @@ int main()
 char* cat_dot(const char* s1, const char* s2)
 {
 	// size of two strings + "." and "\0"
-	int size = strlen(s1)+strlen(s2)+2;
+	//int size = strlen(s1)+strlen(s2)+2;
+	int size=2; 
+	int sz=0;
+	cout << "s1@ " << (void* )s1 << endl;
+	while (*s1) {
+		++s1;
+		++sz;
+	}
+	size+=sz;
+	s1-=sz;
+	sz=0;
+	cout << "s1@ " << (void* )s1 << endl;
+	cout << "s2@ " << s2 << endl;
+	while (*s2) {
+		++s2;
+		++sz;
+	}
+	s2-=sz;
+	size+=sz;
+	cout << "s2@ " << s2 << endl;
+
+	char* str = new char[size]; // allocate space for new string
+	// copy s1 to str
+	int i=0; // index into str?
+	while (*s1)
+		*str++=*s1++;
+	// concatenate "." separator
+	*str++='.';
+	// concatenate s2 to str
+	while (*s2)
+		*str++=*s2++;
+	// append "\0" to end of str
+	*str++='\0'; // null terminate string
+	return str-size;
+}
+
+// join s1 and s2 separated by "sep"
+// return c-style-string
+char* cat_sep(const char* s1, const char* s2, const char* sep)
+{
+	// size of two strings + sep and "\0"
+	//int size = strlen(s1)+strlen(s2)+strlen(sep)+1;
+	int size=1;
+	// calculate size of strings s1 and s2 and sep
 	char* str = new char[size]; // allocate space for new string
 	// copy s1 to str
 
@@ -68,6 +105,7 @@ char* cat_dot(const char* s1, const char* s2)
 	// concatenate s2 to str
 
 	// append "\0" to end of str
+	return str;
 }
 
 char* my_strdup(const char* str)
