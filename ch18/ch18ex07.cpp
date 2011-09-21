@@ -44,6 +44,7 @@ int main()
 	str2[0]='\0';
 	str3 = cat_dot(str1,str2);
 	cout << "cat_dot(str1,str2): " << str3 << endl;
+	delete[] str3;
 
 	return 0;
 }
