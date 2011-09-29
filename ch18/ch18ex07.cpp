@@ -2,12 +2,12 @@
  * @author Jason Angus
  * @file ch18ex07.cpp
  * @date 2011-09-16
- *
+ * Last edit: 2011-09-16
  * 
  * 7. Write versions of the cat_dot()s from the previous exercises to take 
  *    C-style strings as arguments and return a free-store-allocated C-style 
  *    string as the result. Do not use standard library functions or types in 
- *    the implementation. Test these functions with several strings. Be sure to 
+ *    the implementation. Test these functions with several strings. Be sure to
  *    free (using delele) all the memory you allocated from free Store (using 
  *    new). Compare the effort involved in this exercise with the effort 
  *    involved for exercises 5 and 6.
@@ -18,8 +18,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-#include <string>
-using std::string;
+//#include <string>
+//using std::string;
 
 
 void srcfile_info(); // display basic source file information
@@ -33,17 +33,24 @@ char* cat_sep(const char* s1, const char* s2, const char* sep);
 int main()
 {
 	srcfile_info();
+	// test some c-string functions
 	char str1[]="string1";
 	char str2[]="string2";
 	char sep[]="_._";
 	char* str3 = cat_dot(str1,str2);
+
 	cout << "cat_dot(str1,str2): " << str3 << endl;
-	str1[0]='\0';
-	str3 = cat_dot(str1,str2);
-	cout << "cat_dot(str1,str2): " << str3 << endl;
-	str2[0]='\0';
-	str3 = cat_dot(str1,str2);
-	cout << "cat_dot(str1,str2): " << str3 << endl;
+	// str1[0]='\0'; // truncate str1
+	// str3 = cat_dot(str1,str2);
+	// cout << "cat_dot(str1,str2): " << str3 << endl;
+	// str2[0]='\0'; // truncate str2
+	// str3 = cat_dot(str1,str2);
+	// cout << "cat_dot(str1,str2): " << str3 << endl;
+
+	cout << "Test cat_sep():\n";
+	str3 = cat_sep(str1,str2,sep);
+	cout << "cat_sep(str1,str2,sep): " << str3 << endl;
+
 	delete[] str3;
 
 	return 0;
@@ -55,9 +62,10 @@ char* cat_dot(const char* s1, const char* s2)
 {
 	// size of two strings + "." and "\0"
 	//int size = strlen(s1)+strlen(s2)+2;
-	int size=2; 
-	int sz=0;
-	cout << "s1@ " << (void* )s1 << endl;
+	int size=2; // total size required for concatenated string
+	int sz=0; // used to store calculated size of individual strings
+
+	// cout << "s1@ " << (void* )s1 << endl; // addr of s1
 	while (*s1) {
 		++s1;
 		++sz;
@@ -65,26 +73,30 @@ char* cat_dot(const char* s1, const char* s2)
 	size+=sz;
 	s1-=sz;
 	sz=0;
-	cout << "s1@ " << (void* )s1 << endl;
-	cout << "s2@ " << s2 << endl;
+	// cout << "s1@ " << (void* )s1 << endl; // display addr of s1
+	// cout << "s2@ " << s2 << endl;
+
 	while (*s2) {
 		++s2;
 		++sz;
 	}
 	s2-=sz;
 	size+=sz;
-	cout << "s2@ " << s2 << endl;
+	// cout << "s2@ " << s2 << endl;
+	cout << "cat_dot(), total size=" << size << endl;
 
 	char* str = new char[size]; // allocate space for new string
+
 	// copy s1 to str
-	int i=0; // index into str?
 	while (*s1)
 		*str++=*s1++;
+
 	// concatenate "." separator
 	*str++='.';
 	// concatenate s2 to str
 	while (*s2)
 		*str++=*s2++;
+
 	// append "\0" to end of str
 	*str++='\0'; // null terminate string
 	return str-size;
@@ -96,17 +108,53 @@ char* cat_sep(const char* s1, const char* s2, const char* sep)
 {
 	// size of two strings + sep and "\0"
 	//int size = strlen(s1)+strlen(s2)+strlen(sep)+1;
-	int size=1;
-	// calculate size of strings s1 and s2 and sep
-	char* str = new char[size]; // allocate space for new string
-	// copy s1 to str
+	int size=1; // total size required for concatenated string
+	int sz=0; // used to store calculated size of individual strings
 
-	// concatenate "." separator
+	// calculate size of strings s1 and s2 and sep
+	// size of sep
+	while (*sep) {
+		++sep;
+		++sz;
+	}
+	size+=sz;
+	sep-=sz;
+	sz=0;
+	// size of s1
+	while (*s1) {
+		++s1;
+		++sz;
+	}
+	size+=sz;
+	s1-=sz;
+	sz=0;
+	// size of s2
+	while (*s2) {
+		++s2;
+		++sz;
+	}
+	size+=sz;
+	s2-=sz;
+	sz=0;
+	cout << "cat_sep(), total size=" << size << endl;
+	
+	// allocate space for new string
+	char* str = new char[size]; 
+	// copy s1 to str
+	while (*s1)
+		*str++=*s1++;
+
+	// concatenate  separator
+	while (*sep)
+		*str++=*sep++;
 
 	// concatenate s2 to str
+	while (*s2)
+		*str++=*s2++;
 
 	// append "\0" to end of str
-	return str;
+	*str++='\0'; // null terminate string
+	return str-size;
 }
 
 char* my_strdup(const char* str)
