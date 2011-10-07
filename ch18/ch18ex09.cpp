@@ -22,6 +22,7 @@ using std::string;
 void srcfile_info(); // display basic source file information
 
 void show_addr(int x);
+void show_addr2(int x);
 // global variables
 int global_1=0;
 int global_2=0;
@@ -39,9 +40,14 @@ int main()
 	int* a2 = new int[25];
 
 	cout << "&a1: " << &a1 << endl;
+	for (int i=0; i<20; ++i)
+		cout << "&a1[" << i << "]:" << &a1[i] << endl;
 	cout << "&a2: " << &a2 << endl;
+	for (int i=0; i<25; ++i)
+		cout << "&a2[" << i << "]:" << &a2[i] << endl;
 
-
+	cout << "&show_addr(): " << (void *)show_addr << endl;
+	cout << "&show_addr2(): " << (void *)show_addr2 << endl;
 	return 0;
 }
 
@@ -54,6 +60,21 @@ void srcfile_info()
 }
 
 void show_addr(int x)
+{
+	cout << "show-addr()\n";
+	cout << "x: " << x << endl;
+	static int y=5;
+
+	cout << "y: " << y << endl;
+	cout << "&x: " << &x << ", &y: " << &y << endl;
+
+	--y;
+	if (y>0)
+		show_addr(y);
+	return;
+}
+
+void show_addr2(int x)
 {
 	cout << "show-addr()\n";
 	cout << "x: " << x << endl;
