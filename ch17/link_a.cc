@@ -19,7 +19,7 @@
 using std::cin;
 using std::cout;
 
-#include "link_a.hpp"
+#include "link_a.h"
 
 Link* Link::insert(Link* n)
 // insert n before this object

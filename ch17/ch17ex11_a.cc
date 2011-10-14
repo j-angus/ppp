@@ -27,7 +27,7 @@ using std::vector;
 #include<string>
 using std::string;
 
-#include "link_a.hpp"
+#include "link_a.h"
 
 void srcfile_info(); // display basic source file information
 
