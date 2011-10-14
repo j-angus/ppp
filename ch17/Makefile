@@ -11,11 +11,12 @@ OBJDIR = ../obj
 SRC = link_a
 PROG = filename
 
-$(PROG): $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
-	$(CXX) $(CXXFLAGS) -o $(BINDIR)/$(PROG) $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
+$(PROG) : $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
+		$(CXX) $(CXXFLAGS) -o $(BINDIR)/$(PROG) $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
 
-$(OBJDIR)/$(PROG).o: $(PROG).cc
-	$(CXX) $(CXXFLAGS) -c $(PROG).cc -o $(OBJDIR)/$(PROG).o
+# Attempting to use builtin implicit rules for compilation
+# $(OBJDIR)/$(PROG).o : $(PROG).cc
+#		$(CXX) $(CXXFLAGS) -c $(PROG).cc -o $(OBJDIR)/$(PROG).o
 
-$(OBJDIR)/$(SRC).o: $(SRC).h $(SRC).cc
-	$(CXX) $(CXXFLAGS) -c $(SRC).cc -o $(OBJDIR)/$(SRC).o
+$(OBJDIR)/$(SRC).o : $(SRC).h $(SRC).cc
+		$(CXX) $(CXXFLAGS) -c $(SRC).cc -o $(OBJDIR)/$(SRC).o

@@ -1,7 +1,7 @@
 /*
  * =============================================================================
  *
- *       Filename:  link_a.hpp
+ *       Filename:  link_a.h
  *
  *    Description:  Declaration of Link class
  *
@@ -15,14 +15,18 @@
  * =============================================================================
  */
 
+// attempting to use make's implicit rules for compilation
+// the implicit rule for link_a.o is proving tricky because of the added
+// header file. Bummer.
+
 #include <string>
 using std::string;
 #include <iostream>
 using std::cout;
 using std::endl;
 
-#ifndef LINK_A_HPP
-#define LINK_A_HPP
+#ifndef LINK_A_H
+#define LINK_A_H
 
 class Link {
 public:
@@ -33,13 +37,13 @@ public:
 				<< this << endl; }
 
 
-	Link* insert(Link* n);		// insert n before this object
-	Link* add(Link* n);		// insert n after this object
-	Link* erase();			// remove this object from list
+	Link* insert(Link* n);			// insert n before this object
+	Link* add(Link* n);				// insert n after this object
+	Link* erase();					// remove this object from list
 	Link* find(const string& s); 	// find s in list
 	const Link* find(const string& s) const; // find s in list
 
-	Link* advance(int n);		// move n positions in list
+	Link* advance(int n);			// move n positions in list
 
 	Link* next() const {return succ;}
 	Link* previous() const {return prev;}
@@ -49,4 +53,4 @@ private:
 	Link* prev;
 	Link* succ;
 };
-#endif // LINK_A_HPP
+#endif // LINK_A_H

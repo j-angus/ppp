@@ -1,7 +1,7 @@
 /*
  * =============================================================================
  *
- *       Filename:  ch17ex11_a.cpp
+ *       Filename:  ch17ex11_a.cc
  *
  *    Description: from ppp, page 610
  *
@@ -31,6 +31,8 @@ using std::string;
 
 void srcfile_info(); // display basic source file information
 
+// trying to use make's built-in implicit rules for compilation...
+// I think I'm getting somewhere with that..
 
 int main()
 try {
