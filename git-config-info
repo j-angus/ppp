@@ -23,4 +23,8 @@ git remote add usb-stick /media/UNI_FILES/Depot/ppp
 
 this will add a remote section to the local .git/config
 
+update local repository from usb-stick:
+
+cd ~/swdev/c++/ppp
+git pull usb-stick master
 
