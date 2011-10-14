@@ -1,4 +1,4 @@
-/**
+/*
 	simple "Programming: Principles and Practice using C++" course header to
 	be used for the first few weeks.
 	It provides the most common standard headers (in the global namespace)
@@ -84,12 +84,12 @@ template< class T> struct Vector : public std::vector<T> {
 
 	T& operator[](unsigned int i) // rather than return at(i);
 	{
-		if (this->size()<=i) throw Range_error(i);
+		if (i<0||this->size()<=i) throw Range_error(i);
 		return std::vector<T>::operator[](i);
 	}
 	const T& operator[](unsigned int i) const
 	{
-		if (this->size()<=i) throw Range_error(i);
+		if (i<0||this->size()<=i) throw Range_error(i);
 		return std::vector<T>::operator[](i);
 	}
 };
@@ -99,7 +99,7 @@ template< class T> struct Vector : public std::vector<T> {
 
 // trivially range-checked string (no iterator checking):
 struct String : std::string {
-
+	
 	String() { }
 	String(const char* p) :std::string(p) {}
 	String(const string& s) :std::string(s) {}
@@ -109,17 +109,15 @@ struct String : std::string {
 
 	char& operator[](unsigned int i) // rather than return at(i);
 	{
-		if (size()<=i) throw Range_error(i); // (i<0||size()<=i) throw Range_error(i);
+		if (i<0||size()<=i) throw Range_error(i);
 		return std::string::operator[](i);
 	}
 
 	const char& operator[](unsigned int i) const
 	{
-		if (size()<=i) throw Range_error(i); // (i<0||size()<=i) throw Range_error(i);
+		if (i<0||size()<=i) throw Range_error(i);
 		return std::string::operator[](i);
 	}
-	// destructor
-	//virtual ~String();
 };
 
 #ifndef _MSC_VER
