@@ -28,3 +28,7 @@ update local repository from usb-stick:
 cd ~/swdev/c++/ppp
 git pull usb-stick master
 
+update usb-stick from local repository:
+
+git push usb-stick
+
