@@ -2,6 +2,8 @@
 # use:
 # make PROG=%e
 # in geany
+# I need to get better at dealing with multiple source files
+#
 CC = g++
 CFLAGS = -gdwarf-2 -Wall -Wextra -Weffc++
 BINDIR = ~/swdev/c++/ppp/bin

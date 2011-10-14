@@ -1,0 +1,26 @@
+some git commands for setting up a repository on a usb stick to allow offline 
+
+info from git man pages and O'Reilly's Version Control with Git(2009) VCwG
+synchronisation of separate local repositories
+
+create bare (authoritative) repository:
+(man git clone)
+git clone --no-hardlinks --bare --origin felix ~/swdev/c++/ppp file:///media/UNI_FILES/Depot/ppp.git
+
+-- or --
+
+git clone --bare file:///home/jason/swdev/c++/ppp file:///media/UNI_FILES/Depot/ppp.git
+
+where using the file:/// prefix uses no hardlinks, making the --no-hardlinks
+option redundant
+
+next, add a remote to the local repository to enable syncing with repository on 
+a usb stick:
+(ref VCwG ch11, page 186)
+cd ~/swdev/c++/ppp
+
+git remote add usb-stick /media/UNI_FILES/Depot/ppp
+
+this will add a remote section to the local .git/config
+
+

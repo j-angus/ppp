@@ -35,7 +35,6 @@ void srcfile_info(); // display basic source file information
 int main()
 try {
 	srcfile_info();
-
 	Link* head = new Link("Head");
 
 	cout << "head->value: " << head->value << endl;
@@ -57,8 +56,6 @@ try {
 	cout << "after head=head->erase() ...\n";
 	cout << "head->value: " << head->value << endl;
 	cout << "address of head: " << &head << endl;
-
-
 
 }
 catch (std::exception& e) {

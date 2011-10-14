@@ -13,6 +13,7 @@
 
 void show_state(istringstream &iss); // show state of stream
 void usage(void); // print basic program usage
+
 int main(int argc, char** argv)
 {
 	if (argc < 3) {

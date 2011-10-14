@@ -21,7 +21,6 @@ using std::cout;
 
 #include "link_a.hpp"
 
-
 Link* Link::insert(Link* n)
 // insert n before this object
 {
@@ -118,4 +117,3 @@ Link* Link::advance(int n)
 
 	return this;
 }
-
