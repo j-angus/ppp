@@ -6,7 +6,7 @@
 #
 CC = g++
 CFLAGS = -gdwarf-2 -Wall -Wextra -Weffc++
-BINDIR = ~/swdev/c++/ppp/bin
+BINDIR = ../bin
 OBJDIR = ../obj
 SRC = link_a
 PROG = filename

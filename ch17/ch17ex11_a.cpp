@@ -44,18 +44,26 @@ try {
 	head->add(tail);
 	cout << "head->next()->value: " << head->next()->value << endl;
 	cout << "address of head->next(): " << (head->next()) << endl;
-	cout << "address of (void*)head->next(): " << (void*)(head->next()) << endl;
 
 	Link* next_link = new Link("next_link");
 	head->add(next_link);
 	cout << "head->next()->next()->value: " << head->next()->value << endl;
 	cout << "address of head->next(): " << head->next() << endl;
-	cout << "address of (void*)head->next(): " << (void*)(head->next()) << endl;
 
 	head=head->erase();
 	cout << "after head=head->erase() ...\n";
 	cout << "head->value: " << head->value << endl;
 	cout << "address of head: " << &head << endl;
+
+	Link* str_search=0;
+	if (str_search=head->find("Tail"))
+		cout << "found str_search->value: " << str_search->value << endl;
+	else
+		cout << "String not found in list...\n";
+	if (str_search=head->find("cow"))
+		cout << "found str_search->value: " << str_search->value << endl;
+	else
+		cout << "String not found in list...\n";
 
 }
 catch (std::exception& e) {
