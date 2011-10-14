@@ -6,7 +6,7 @@ synchronisation of separate local repositories
 create bare (authoritative) repository:
 (man git clone)
 
-git clone --no-hardlinks --bare /home/jason/swdev/c++/ppp /media/UNI_FILES/Depot/ppp.git
+git clone --no-hardlinks --bare ~/swdev/c++/ppp /media/UNI_FILES/Depot/ppp.git
 
 next, add a remote to the local repository to enable syncing with repository on 
 a usb stick:
