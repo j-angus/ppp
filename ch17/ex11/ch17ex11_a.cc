@@ -14,7 +14,7 @@
  *
  * =============================================================================
  */
-// Makefile editing seems to be a bit of a black art...
+
 #include <iostream>
 using std::istream;
 using std::cin;
@@ -31,15 +31,46 @@ using std::string;
 
 void srcfile_info(); // display basic source file information
 
-// trying to use make's built-in implicit rules for compilation...
-// I think I'm getting somewhere with that..
+void print_all(Link* p)
+{
+	cout << "print_all()\n";
+	cout << "{\n";
+	while (p) {
+		cout << p->value << ":\taddr: " << p << ", prev: " << p->previous() 
+			<< ", succ: " << p->next() << endl;
+		p=p->next();
+	}
+	cout << "}\n";
+}
 
 int main()
 try {
 	srcfile_info();
+	/*
 	Link* head = new Link("Head");
-
+	print_all(head);
 	cout << "head->value: " << head->value << endl;
+	*/
+
+	Link* numbers = new Link("ONE");
+	numbers = numbers->insert(new Link("TWO"));
+	numbers = numbers->insert(new Link("THREE"));
+	numbers = numbers->insert(new Link("FOUR"));
+	numbers = numbers->insert(new Link("FIVE"));
+	print_all(numbers);
+
+	numbers = numbers->erase();
+	print_all(numbers);
+
+	numbers = numbers->find("ONE");
+	print_all(numbers);
+	numbers = numbers->erase();
+	print_all(numbers);
+
+	numbers = numbers->advance(-2);
+	print_all(numbers);
+
+/*
 	cout << "address of head: " << &head << endl;
 
 	Link* tail = new Link("Tail");
@@ -66,6 +97,7 @@ try {
 		cout << "found str_search->value: " << str_search->value << endl;
 	else
 		cout << "String not found in list...\n";
+	*/
 
 }
 catch (std::exception& e) {
