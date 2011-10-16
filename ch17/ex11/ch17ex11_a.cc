@@ -47,25 +47,6 @@ void print_all(Link* p)
 
 string itostr(int n); // returns string equivalent of interger
 
-void int_view(const int n)
-// counts number of places in a positive int
-// stores each place value into a vector element
-{
-	cout << "int_view()\n";
-	const int mask = 10; // mask off units
-	vector<int> vi;
-	int p = n;
-	
-	cout << "checking number: " << n << endl;
-	if (n==0) vi.push_back(n);
-	while (p%mask) {
-		vi.push_back(p%mask);
-		p/=mask;
-	}	
-	cout << "vi.size(): " << vi.size() << endl;
-	for (int i=0; i<vi.size(); ++i)
-		cout << "vi[" << i << "]: " << vi.at(i) << endl;
-}
 
 int main()
 try {
@@ -89,15 +70,47 @@ try {
 	numbers = numbers->advance(-2);
 	print_all(numbers);
 
-	string link_num("stuff");
-	link_num += ("_" + itostr(1));
-	Link* stuff = new Link(link_num);
+	const string link_prefix("stuff_");
+	string link_val = link_prefix + itostr(1);
+	Link* stuff = new Link(link_val);
+	for (int i=2; i<11; ++i) {
+		link_val = link_prefix + itostr(i);
+		stuff=stuff->add(new Link(link_val));
+	}
 	print_all(stuff);
 
-	string num;
-	cout << "num: " << num << endl;
-	int_view(1234);
-	int_view(0);
+	stuff=stuff->find("stuff_6");
+	print_all(stuff);
+
+	stuff=stuff->erase();
+	stuff=stuff->advance(-5);
+	
+	print_all(stuff);
+
+	stuff=stuff->find("stuff_5");
+	stuff=stuff->insert(new Link("stuff_6"));
+	stuff=stuff->advance(-5);
+	print_all(stuff);
+
+	// ok, so I've been stuffing this up by using the original Link*
+	// I need to declare another variable for operating on the list
+	// while keeping the reference to the top of the list!
+	//
+	Link* p1 = stuff->find("stuff_6");
+	if (p1) p1->value="Stuffed if I know!";	
+	print_all(stuff);
+
+	Link* p2 = numbers->find("FOUR");
+	if (p2) {
+		if (p2 == numbers) numbers = p2->erase(); //p2->next();
+		//p2->erase();
+		print_all(p2);
+		stuff=stuff->insert(p2);
+	}
+
+
+	print_all(numbers);
+	print_all(stuff);
 }
 catch (std::exception& e) {
 	cout << "standard library exception: " << e.what() << "\n";
@@ -127,7 +140,7 @@ string itostr(int n)
 	
 	cout << "checking number: " << n << endl;
 	if (n==0) vi.push_back(n);
-	while (p%mask) {
+	while (p) {
 		vi.push_back(p%mask);
 		p/=mask;
 	}	
