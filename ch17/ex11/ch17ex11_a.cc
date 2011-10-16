@@ -45,14 +45,31 @@ void print_all(Link* p)
 	cout << "}\n";
 }
 
+string itostr(int n); // returns string equivalent of interger
+
+void int_view(const int n)
+// counts number of places in a positive int
+// stores each place value into a vector element
+{
+	cout << "int_view()\n";
+	const int mask = 10; // mask off units
+	vector<int> vi;
+	int p = n;
+	
+	cout << "checking number: " << n << endl;
+	if (n==0) vi.push_back(n);
+	while (p%mask) {
+		vi.push_back(p%mask);
+		p/=mask;
+	}	
+	cout << "vi.size(): " << vi.size() << endl;
+	for (int i=0; i<vi.size(); ++i)
+		cout << "vi[" << i << "]: " << vi.at(i) << endl;
+}
+
 int main()
 try {
 	srcfile_info();
-	/*
-	Link* head = new Link("Head");
-	print_all(head);
-	cout << "head->value: " << head->value << endl;
-	*/
 
 	Link* numbers = new Link("ONE");
 	numbers = numbers->insert(new Link("TWO"));
@@ -72,35 +89,15 @@ try {
 	numbers = numbers->advance(-2);
 	print_all(numbers);
 
-/*
-	cout << "address of head: " << &head << endl;
+	string link_num("stuff");
+	link_num += ("_" + itostr(1));
+	Link* stuff = new Link(link_num);
+	print_all(stuff);
 
-	Link* tail = new Link("Tail");
-	head->add(tail);
-	cout << "head->next()->value: " << head->next()->value << endl;
-	cout << "address of head->next(): " << (head->next()) << endl;
-
-	Link* next_link = new Link("next_link");
-	head->add(next_link);
-	cout << "head->next()->next()->value: " << head->next()->value << endl;
-	cout << "address of head->next(): " << head->next() << endl;
-
-	head=head->erase();
-	cout << "after head=head->erase() ...\n";
-	cout << "head->value: " << head->value << endl;
-	cout << "address of head: " << &head << endl;
-
-	Link* str_search=0;
-	if ((str_search=head->find("Tail")))
-		cout << "found str_search->value: " << str_search->value << endl;
-	else
-		cout << "String not found in list...\n";
-	if ((str_search=head->find("cow")))
-		cout << "found str_search->value: " << str_search->value << endl;
-	else
-		cout << "String not found in list...\n";
-	*/
-
+	string num;
+	cout << "num: " << num << endl;
+	int_view(1234);
+	int_view(0);
 }
 catch (std::exception& e) {
 	cout << "standard library exception: " << e.what() << "\n";
@@ -117,4 +114,60 @@ void srcfile_info()
 	cout << "Compiled:\t" << __DATE__;
 	cout << " at " << __TIME__ << "\n\n";
 	return;
+}
+
+string itostr(int n)
+// returns string equivalent of a positive interger
+{
+	cout << "itostr()\n";
+	string val("");
+	const int mask = 10; // mask off units
+	vector<int> vi;
+	int p = n;
+	
+	cout << "checking number: " << n << endl;
+	if (n==0) vi.push_back(n);
+	while (p%mask) {
+		vi.push_back(p%mask);
+		p/=mask;
+	}	
+	for (int i=vi.size()-1; i>=0; --i) {
+
+		switch (vi.at(i)) {
+			case 0:
+				val+="0";
+				break;
+			case 1:
+				val+="1";
+				break;
+			case 2:
+				val+="2";
+				break;
+			case 3:
+				val+="3";
+				break;
+			case 4:
+				val+="4";
+				break;
+			case 5:
+				val+="5";
+				break;
+			case 6:
+				val+="6";
+				break;
+			case 7:
+				val+="7";
+				break;
+			case 8:
+				val+="8";
+				break;
+			case 9:
+				val+="9";
+				break;
+			default:
+				cout << "itostr(): can't handle n.\n";
+				break;
+		}
+	}
+	return val;
 }

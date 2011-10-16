@@ -38,7 +38,6 @@ public:
 			cout << "Link::Link()\n"; cout << "address of this: " 
 				<< this << endl; }
 
-
 	Link* insert(Link* n);			// insert n before this object
 	Link* add(Link* n);				// insert n after this object
 	Link* erase();					// remove this object from list
@@ -51,7 +50,6 @@ public:
 	Link* previous() const {return prev;}
 
 private:
-
 	Link* prev;
 	Link* succ;
 };
