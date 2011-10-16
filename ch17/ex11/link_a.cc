@@ -89,27 +89,49 @@ Link* Link::find(const string& s)
 // find s in list
 {
 	cout << "Link::find()\n";
-	
+/*	
 	Link* p=this;
 	// using p because this is immutable
 	while (p) {
+		cout << "this: " << this << ", this->value: " << this->value 
+			<< ", this->prev: " << this->prev 
+			<< ", this->succ: " << this->succ << endl;
+		cout << "p: " << p << ", p->value: " << p->value 
+			<< ", p->prev: " << p->prev 
+			<< ", p->succ: " << p->succ << endl;
 		if (p->value==s) {
 			cout << "Link::find(), value found\n";
 			return p;
 		}
 		p=p->succ;
 	}
-/*
+/*/
 	// have to manipulate succ because this is immutable
+	// and doing this breaks the list. Each iteration changes
+	// this->succ, but this is never altered to the next object
+	// so this->succ is incorrectly set which stuffs up the link when
+	// trying to travese the lsit at a later stage
 	if (value==s) return this;
 	while (succ) {
+		cout << "this: " << this << ", this->value: " << this->value 
+			<< ", this->prev: " << this->prev 
+			<< ", this->succ: " << this->succ << endl;
+		cout << "succ: " << succ << ", succ->value: " << succ->value 
+			<< ", succ->prev: " << succ->prev 
+			<< ", succ->succ: " << succ->succ << endl;
 		if (succ->value==s) {
 			cout << "Link::find(), value found\n";
 		   	return succ;
 		}
 		succ=succ->succ;
+		cout << "this: " << this << ", this->value: " << this->value 
+			<< ", this->prev: " << this->prev 
+			<< ", this->succ: " << this->succ << endl;
+		cout << "succ: " << succ << ", succ->value: " << succ->value 
+			<< ", succ->prev: " << succ->prev 
+			<< ", succ->succ: " << succ->succ << endl;
 	}
-*/
+//*/
 	cout << "Link::find(), value not found in list\n";
 	return 0; // s not found in list
 }
@@ -178,7 +200,8 @@ Link* Link::advance(int n)
 	// i can't directly manipulate this. will have to inc/dec n before
 	// looping though list elements to advance the correct amount
 	if (0<n) {
-		--n; // because we can't directly manipulate this
+		--n; 	// because we can't directly manipulate this
+			// there is an index offset
 		while (n--) {
 			if (succ==0) {
 				cout << "Link::advance(), Hit end of list\n";
@@ -189,7 +212,8 @@ Link* Link::advance(int n)
 		return succ;
 	}
 	if (n<0) {
-		++n; // because we can't directly manipulate this
+		++n; 	// because we can't directly manipulate this
+			// there is an index offset
 		while (n++) {
 			if (prev==0) {
 				cout << "Link::advance(), Hit end of list\n";
