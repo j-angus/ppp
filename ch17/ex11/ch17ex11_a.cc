@@ -11,7 +11,9 @@
  *       Compiler:  g++
  *
  *         Author:  Jason Angus
- *
+ *	TODO:	come up with a method to create dynamic values for list
+ *		so i can make it arbitrarily sized and see how values
+ *		are affected
  * =============================================================================
  */
 

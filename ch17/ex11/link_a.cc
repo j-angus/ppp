@@ -89,7 +89,7 @@ Link* Link::find(const string& s)
 // find s in list
 {
 	cout << "Link::find()\n";
-/*	
+	
 	Link* p=this;
 	// using p because this is immutable
 	while (p) {
@@ -105,7 +105,7 @@ Link* Link::find(const string& s)
 		}
 		p=p->succ;
 	}
-/*/
+/*
 	// have to manipulate succ because this is immutable
 	// and doing this breaks the list. Each iteration changes
 	// this->succ, but this is never altered to the next object
@@ -131,7 +131,7 @@ Link* Link::find(const string& s)
 			<< ", succ->prev: " << succ->prev 
 			<< ", succ->succ: " << succ->succ << endl;
 	}
-//*/
+*/
 	cout << "Link::find(), value not found in list\n";
 	return 0; // s not found in list
 }
@@ -175,7 +175,7 @@ Link* Link::advance(int n)
 		cout << "Link::advance(), list empty\n";
 		return 0;
 	}
-/*
+
    // use p because not able to change this. this is immutable
 	Link* p=this;
 	if (0<n) {
@@ -194,7 +194,12 @@ Link* Link::advance(int n)
 		}
 	}
 	return p;	
-*/
+/*
+	// This has the same error as the find() method which stuffs up the
+	// list links because this is immutable and we are incorrectly changing
+	// this->succ or this->prev
+	// need to make of copy of this and traverse the list using the copy
+	//
 	// implement advance using this object
 	// i reckon there will be an offset error (off by one) because
 	// i can't directly manipulate this. will have to inc/dec n before
@@ -224,5 +229,5 @@ Link* Link::advance(int n)
 		return prev;
 	}
 	return this;
-//*/
+*/
 }
