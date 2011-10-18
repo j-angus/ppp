@@ -2,14 +2,21 @@
 # use:
 # make PROG=%e
 # in geany
-CC = g++
-CFLAGS = -gdwarf-2 -Wall -Wextra -Weffc++
-BINDIR = ~/swdev/c++/ppp/bin
+# I need to get better at dealing with multiple source files
+#
+CXX = g++
+CXXFLAGS = -gdwarf-2 -Wall -Wextra -Weffc++
+BINDIR = ../bin
 OBJDIR = ../obj
+SRC = link_a
 PROG = filename
 
-$(PROG): $(OBJDIR)/$(PROG).o
-	$(CC) $(CFLAGS) -o $(BINDIR)/$(PROG) $(OBJDIR)/$(PROG).o
+$(PROG) : $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
+		$(CXX) $(CXXFLAGS) -o $(BINDIR)/$(PROG) $(OBJDIR)/$(PROG).o $(OBJDIR)/$(SRC).o
 
-$(OBJDIR)/$(PROG).o: $(PROG).cpp
-	$(CC) $(CFLAGS) -c $(PROG).cpp -o $(OBJDIR)/$(PROG).o
+# Attempting to use builtin implicit rules for compilation
+# $(OBJDIR)/$(PROG).o : $(PROG).cc
+#		$(CXX) $(CXXFLAGS) -c $(PROG).cc -o $(OBJDIR)/$(PROG).o
+
+$(OBJDIR)/$(SRC).o : $(SRC).h $(SRC).cc
+		$(CXX) $(CXXFLAGS) -c $(SRC).cc -o $(OBJDIR)/$(SRC).o

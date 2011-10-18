@@ -1,0 +1,43 @@
+Programming Practice and Principles Using C++
+Bjarne Stroustrup
+Chapter and exercise page numbers
+
+Ch00, p001
+Ch01, p017
+Ch02, p043
+Ch03, p059
+Ch04, p089
+Ch05, p131
+Ch06, p171
+Ch07, p219
+Ch08, p253
+Ch09, p299
+Ch10, p339
+Ch11, p375
+Ch12, p407
+Ch13, p437
+Ch14, p479
+Ch15, p509
+Ch16, p539
+Ch17, p569 - Vector and Free Store
+ex, p609
+Ch18, p611 - Vectors and Arrays
+ex, p643
+Ch19, p645 - Vector, Templates, and Exceptions
+ex, p682
+Ch20, p685 - Containers and Iterators
+ex, p725
+Ch21, p727 - Algorithms and Maps
+ex, p766
+Ch22, p771 - Ideals and History
+Ch23, p813 - Text Manipulation
+ex, p851
+Ch24, p853 - Numerics
+ex, p885
+Ch25, p887 - Embedded Systems Programming
+ex, p946
+Ch26, p949 - Testing
+ex, p984
+Ch27, p987 - The C Programming Language
+ex, p1033
+

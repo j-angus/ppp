@@ -6,5 +6,7 @@
 *.[oa]
 # compiled binaries 
 bin/
+# object files
+obj/
 # book source code directory
 code/
