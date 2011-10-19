@@ -12,8 +12,8 @@
  *
  *         Author:  Jason Angus
  *	TODO:	come up with a method to create dynamic values for list
- *		so i can make it arbitrarily sized and see how values
- *		are affected
+ *			so i can make it arbitrarily sized and see how values
+ *			are affected
  * =============================================================================
  */
 
@@ -109,8 +109,13 @@ try {
 	}
 
 
+	cout << "Printing numbers\n";
 	print_all(numbers);
+	cout << "Printing stuff\n";
 	print_all(stuff);
+
+	string test = itostr(1234567890);
+	cout << "test =itostr(1234567890): " << test << endl;
 }
 catch (std::exception& e) {
 	cout << "standard library exception: " << e.what() << "\n";
@@ -133,17 +138,17 @@ string itostr(int n)
 // returns string equivalent of a positive interger
 {
 	cout << "itostr()\n";
-	string val("");
+	string val;
 	const int mask = 10; // mask off units
 	vector<int> vi;
-	int p = n;
 	
 	cout << "checking number: " << n << endl;
 	if (n==0) vi.push_back(n);
-	while (p) {
-		vi.push_back(p%mask);
-		p/=mask;
+	while (n>0) {
+		vi.push_back(n%mask);
+		n/=mask;
 	}	
+	
 	for (int i=vi.size()-1; i>=0; --i) {
 
 		switch (vi.at(i)) {
