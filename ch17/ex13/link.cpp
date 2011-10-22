@@ -85,12 +85,7 @@ Link* Link::add_ordered(Link* n)
 	if ((n->god->name < p->god->name)) {
 		cout << n->god->name << " < " << p->god->name << endl;
 		p->insert(n);
-		/*
-		n->succ=p;
-		if (p->prev) p->prev->succ=n;
-		n->prev=p->prev;
-		p->prev=n;
-		*/
+		
 		return head();
 	}
 	
@@ -103,23 +98,16 @@ Link* Link::add_ordered(Link* n)
 		else
 			break;
 	}
+
+	p->add(n);
+	return head();
 	/*
-	while ((n->god->name > p->god->name)) {
-		cout << "comparing: " 
-			<< n->god->name << " and " << p->god->name << endl;
-		if (p->next())
-		if (p->next() && (n->god->name > p->next()->god->name)) {
-			cout << "comparing: " 
-				<< n->god->name << " and " << p->god->name << endl;
-			p=p->next();
-		}
-	}
-	*/
 	if (p->succ) p->succ->prev=n;
 	n->succ=p->succ;
 	p->succ=n;
 	n->prev=p;
 	return n;
+	* */
 }
 
 // returns the head of the list
