@@ -62,6 +62,7 @@ Link* Link::add(Link* n)
 
 Link* Link::add_ordered(Link* n)
 // insert n in correct lexicographical order within the list
+// sorts lexicographically by god->name
 {
 	cout << "Link::add_ordered()\n";
 	if (n==0){
@@ -72,42 +73,23 @@ Link* Link::add_ordered(Link* n)
 	cout << "ERROR: This is a NULL link...\n";
 	   	return n;
 	}	
-	// traverse list here, lookng for lexicograhical location for 
-	// n->god->name to fit in...
-	// find the head of the list...prev == 0
-	Link* p = this;
-	while (p->previous())
-		p=p->previous();
-	// compare god->name between this and n...
-	//if this->god->name < n->god->name move to the next Link
-	// if this->god->name > n->god->name move back to prev Link
+	Link* p = head();
 	
+	// check for n being before first list element
 	if ((n->god->name < p->god->name)) {
 		cout << n->god->name << " < " << p->god->name << endl;
 		p->insert(n);
-		
 		return head();
 	}
-	
-	cout << "comparing: " 
-			<< n->god->name << " and " << p->god->name << endl;
+
 	while (p->next()) {
 		if ((n->god->name > p->god->name) &&
 			(n->god->name > p->next()->god->name))
 			p=p->next();
-		else
-			break;
+		else break;
 	}
-
 	p->add(n);
 	return head();
-	/*
-	if (p->succ) p->succ->prev=n;
-	n->succ=p->succ;
-	p->succ=n;
-	n->prev=p;
-	return n;
-	* */
 }
 
 // returns the head of the list
