@@ -1,16 +1,26 @@
 /*
  * =============================================================================
  *
- *       Filename:  ch17ex11_a.cc
+ *       Filename:  ch17ex13.cpp
  *
  *    Description: from ppp, page 610
  *
  *        Version:  1.0
- *        Created:  10/13/2011 06:19:52 AM
+ *        Created:  21/10/2011 06:19:52 AM
  *       Revision:  none
  *       Compiler:  g++
- *
  *         Author:  Jason Angus
+ *
+ * 13. Modify the link class from §17.10.1 to hold a value of a struct God.
+ *     struct God should have members of type string: name, mythology, 
+ *     vehicle, and weapon. For example, God ("Zeus", "Greek", "", "lightning")
+ *     and God ("Odin", "Norse", "Eight-legged flying horse called Slieipner",
+ *     ""). Write a print_all function that lists gods with their attributes one
+ *     per line. Add a member function add_ordered() that places its new 
+ *     element in its correct lexicographical position. Using the Links with the
+ *     values of type God, make a list of gods from three mythologies; then move
+ *     the elements (gods) from that list to three lexicographically ordered 
+ *     lists - one for each mythology.
  * =============================================================================
  */
 
@@ -26,7 +36,7 @@ using std::vector;
 #include<string>
 using std::string;
 
-#include "link_a.h"
+#include "link.h"
 
 void srcfile_info(); // display basic source file information
 
@@ -35,90 +45,51 @@ void print_all(Link* p)
 	cout << "print_all()\n";
 	cout << "{\n";
 	while (p) {
-		cout << p->value << ":\taddr: " << p << ", prev: " << p->previous() 
-			<< ", succ: " << p->next() << endl;
+		cout << "addr: " << p << ", prev: " << p->previous() << 
+			", succ: " << p->next() << endl;
+		cout << "name: " << p->god->name << endl; 
+		cout << "mythology: " << p->god->mythology << endl;
+		cout << "vehicle: " << p->god->vehicle << endl;
+		cout << "weapon: " << p->god->weapon << endl;
 		p=p->next();
 	}
 	cout << "}\n";
 }
 
-string itostr(int n); // returns string equivalent of interger
-
+string itostr(int n); // returns string equivalent of integer
 
 int main()
 try {
 	srcfile_info();
 
-	Link* numbers = new Link("ONE");
-	numbers = numbers->insert(new Link("TWO"));
-	numbers = numbers->insert(new Link("THREE"));
-	numbers = numbers->insert(new Link("FOUR"));
-	numbers = numbers->insert(new Link("FIVE"));
-	print_all(numbers);
-
-	numbers = numbers->erase();
-	print_all(numbers);
-
-	numbers = numbers->find("ONE");
-	print_all(numbers);
-	numbers = numbers->erase();
-	print_all(numbers);
-
-	numbers = numbers->advance(-2);
-	print_all(numbers);
-
-	const string link_prefix("stuff_");
-	string link_val = link_prefix + itostr(1);
+	string link_val = "first";
 	Link* stuff = new Link(link_val);
-	for (int i=2; i<11; ++i) {
-		link_val = link_prefix + itostr(i);
-		stuff=stuff->add(new Link(link_val));
-	}
-	print_all(stuff);
-
-	stuff=stuff->find("stuff_6");
-	print_all(stuff);
-
-	stuff=stuff->erase();
-	stuff=stuff->advance(-5);
 	
 	print_all(stuff);
+	
+	string s1="aaa";
+	string s2="bbb";
+	string s3="ccc";
+	string s4="ddd";
 
-	stuff=stuff->find("stuff_5");
-	stuff=stuff->insert(new Link("stuff_6"));
-	stuff=stuff->advance(-5);
+	stuff->add_ordered(new Link(s1));
+	
+	print_all(stuff);
+	
+	stuff->add_ordered(new Link(s4));
+	stuff->add_ordered(new Link(s2));
+	stuff->add_ordered(new Link(s3));
+
+	stuff=stuff->head();
 	print_all(stuff);
 
-	// ok, so I've been stuffing this up by using the original Link*
-	// I need to declare another variable for operating on the list
-	// while keeping the reference to the top of the list!
-	//
-	Link* p1 = stuff->find("stuff_6");
-	if (p1) p1->value="Stuffed if I know!";	
-	print_all(stuff);
-
-	Link* p2 = numbers->find("FOUR");
-	if (p2) {
-		if (p2 == numbers) numbers = p2->erase(); //p2->next();
-		//p2->erase();
-		print_all(p2);
-		stuff=stuff->insert(p2);
-	}
-
-
-	cout << "Printing numbers\n";
-	print_all(numbers);
-	cout << "Printing stuff\n";
-	print_all(stuff);
-
-	string test = itostr(1234567890);
-	cout << "test =itostr(1234567890): " << test << endl;
 }
 catch (std::exception& e) {
-	cout << "standard library exception: " << e.what() << "\n";
+	cout << "standard library exception: " << e.what() << endl; 
 }
 catch (...) {
 	cerr << "unknown exception thrown\n";
+	
 }
 
 
