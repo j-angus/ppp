@@ -13,42 +13,42 @@
 #ifndef CAVE_H
 #define CAVE_H
 
+#include <iostream>
+using std::ostream;
+
 class Cave {
 public:
-	Cave() {
-		bat=false;
-		pit=false;
-		wumpus=false;
-		id=0;
-		++id;
-	}
+	Cave();
+	//~Cave();
 
 	Cave* add(Cave* c);
 	Cave* insert(Cave* c);
-	Cave* prev() const { return pred; }
-	Cave* next() const { return succ; }
 	Cave* head(); // return head of list
+	Cave* find(int cave_id); // search by cave id_
+	Cave* prev() const { return prev_; }
+	Cave* next() const { return next_; }
 
-	bool has_bat() const { return bat; }
-	bool has_pit() const { return pit; }
-	bool has_wump() const { return wumpus; }
-	int id() const { return cave_id; }
+	bool has_bat() const { return bat_; }
+	bool has_pit() const { return pit_; }
+	bool has_wump() const { return wumpus_; }
+	int id() const { return id_; }
 
 	void status(); // display status of cave atttributes
-
+	// overload << operator to print all Cave attributes
+	friend ostream& operator<<(ostream& os, const Cave& aCave);
 private:
-	Cave* pred;
-	Cave* succ;
+	Cave* prev_;
+	Cave* next_;
 	// tunnels to at most three other caves
-	Cave* t1; 
-	Cave* t2; 
-	Cave* t3; 
-	int cave_id; // The number of the cave. Allows referencing caves.
-	static int num_caves; // total number of caves created
-	bool bat;
-	bool pit;
-	bool wumpus;
+	Cave* t1_; 
+	Cave* t2_; 
+	Cave* t3_; 
+	static int num_caves_; // total number of caves created
+	int id_; // The number of the cave. Allows referencing caves.
+	bool bat_;
+	bool pit_;
+	bool wumpus_;
 
-} // Cave
+}; // Cave
 #endif // CAVE_H
 
