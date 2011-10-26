@@ -54,4 +54,27 @@ Cave* Cave::add(Cave* c)
 	return this;
 }
 
+Cave* Cave::head()
+// return head of list
+{
+	Cave* c=this;
+	while (c->prev()) {
+		c=c->prev();
+	}
+	return c;
+}
 
+Cave* Cave::find(int id)
+// find cave with matching id
+{
+	bool found=false;
+	Cave* c=this;
+
+	while(!found && c) {
+		if (c->id()==id)
+			found=true;
+		else
+			c=c->next();
+	}
+	return c;
+}

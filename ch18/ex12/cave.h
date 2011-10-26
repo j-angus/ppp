@@ -27,15 +27,23 @@ public:
 	Cave* find(int cave_id); // search by cave id_
 	Cave* prev() const { return prev_; }
 	Cave* next() const { return next_; }
-
-	bool has_bat() const { return bat_; }
-	bool has_pit() const { return pit_; }
-	bool has_wump() const { return wumpus_; }
+	Cave* t1() const { return t1_; }
+	Cave* t2() const { return t2_; }
+	Cave* t3() const { return t3_; }
+	
+	void set_bat(bool state) { bat_=state; }
+	bool bat() const { return bat_; }
+	void set_pit(bool state) { pit_=state; }
+	bool pit() const { return pit_; }
+	void set_wump(bool state) { wumpus_=state; }
+	bool wump() const { return wumpus_; }
+	
+	int num_caves() const { return num_caves_; }
 	int id() const { return id_; }
 
 	void status(); // display status of cave atttributes
 	// overload << operator to print all Cave attributes
-	friend ostream& operator<<(ostream& os, const Cave& aCave);
+	//friend ostream& operator<<(ostream& os, Cave* aCave);
 private:
 	Cave* prev_;
 	Cave* next_;
