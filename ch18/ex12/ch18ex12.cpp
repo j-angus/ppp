@@ -64,8 +64,13 @@ void init_cave(Cave* c, int bats, int pits)
 
 void print_caves(Cave* c)
 {
+	cout << "print_caves()\n";
 	while (c) {
 		cout << "Cave Object: " << c << endl;
+		//cout << c << endl;
+		c->Print(cout);
+		cout << endl;
+/*
 		cout << "{\n";
 		cout << "prev_: " << c->prev() << endl;
 		cout << "next_: " << c->next() << endl;
@@ -78,6 +83,7 @@ void print_caves(Cave* c)
 		cout << "wump_: " << (c->wump() ? "true" : "false") << endl;
 		cout << "id_: " << c->id() << endl;
 		cout << "}\n";
+  */	
 		c=c->next();
 	}
 	return;

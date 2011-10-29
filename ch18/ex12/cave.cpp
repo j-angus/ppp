@@ -78,3 +78,8 @@ Cave* Cave::find(int id)
 	}
 	return c;
 }
+
+ostream& operator<<( ostream& os, const Cave* c )
+{
+	return c->Print(os);
+}
