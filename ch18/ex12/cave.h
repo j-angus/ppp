@@ -30,16 +30,9 @@ public:
 	Cave* t2() const { return t2_; }
 	Cave* t3() const { return t3_; }
 	
-	ostream& Print(ostream& os) const {
-		return os << 
-			"{\n\tprev_: " << prev_ << ", next_: " << next_ << std::endl <<
-			"\tt1_: " << t1_ << ", t2_: " << t2_ << 
-				", t3_: " << t3_ << std::endl <<
-			"\tid_: " << id_ << std::endl  <<
-			"\tbat_: " << (bat_ ? "true":"false") << std::endl <<
-			"\tpit_: " << (pit_ ? "true":"false") << std::endl <<
-			"\twumpus_: " << (wumpus_ ? "true":"false") << "\n}\n";
-	}
+	std::string toString();
+	ostream& Print(ostream& os);
+
 	void set_bat(bool state) { bat_=state; }
 	bool bat() const { return bat_; }
 	void set_pit(bool state) { pit_=state; }

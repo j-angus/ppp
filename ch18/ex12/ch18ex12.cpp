@@ -16,8 +16,9 @@ using std::ostream;
 
 void srcfile_info(); // display basic source file information
 
-// overload << operator to print all Cave attributes
-//ostream& operator<<(ostream& os, Cave* aCave);
+// overload << operator to print Cave attributes
+ostream& operator<<(ostream& os, Cave* c);
+
 void print_caves(Cave* c);
 
 void init_cave(Cave* c, int bats, int pits);
@@ -66,27 +67,19 @@ void print_caves(Cave* c)
 {
 	cout << "print_caves()\n";
 	while (c) {
-		cout << "Cave Object: " << c << endl;
+		cout << "Cave Object: " << &c << endl << c << endl;
 		//cout << c << endl;
-		c->Print(cout);
-		cout << endl;
-/*
-		cout << "{\n";
-		cout << "prev_: " << c->prev() << endl;
-		cout << "next_: " << c->next() << endl;
-		cout << "t1_: " << c->t1() << endl;
-		cout << "t2_: " << c->t2() << endl;
-		cout << "t3_: " << c->t3() << endl; 
-		cout << "num_caves_: " << c->num_caves() << endl;
-		cout << "bat_: " << (c->bat() ? "true" : "false") << endl;
-		cout << "pit_: " << (c->pit() ? "true" : "false") << endl;
-		cout << "wump_: " << (c->wump() ? "true" : "false") << endl;
-		cout << "id_: " << c->id() << endl;
-		cout << "}\n";
-  */	
+		//c->Print(cout);
 		c=c->next();
 	}
 	return;
+}
+
+// overload << operator to print Cave attributes
+std::ostream& operator<<(std::ostream& os, Cave* c)
+{
+	os << c->toString();
+	return os;
 }
 
 // overload << operator to print all Cave attributes
