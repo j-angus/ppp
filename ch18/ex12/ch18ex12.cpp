@@ -47,8 +47,21 @@ int main()
 
 	// Ok, so here need to setup links between caves, bats, pits and the wumpus
 	// This is cave initialisation after creating the cave list
+	// try {
 	init_cave(myCave, num_bats, num_pits);
+	// } catch (cave init errors) {
+	//	error messages
+	//	exit?
+	//	}
 	print_caves(myCave);
+	// Start game loop here I reckon
+	//
+	bool player_alive = true;
+	bool wump_alive = true;
+	while (player_alive && wump_alive) {
+		cout << "play game loop\n";
+		break;
+	}
 }
 
 void init_cave(Cave* c, int bats, int pits)
