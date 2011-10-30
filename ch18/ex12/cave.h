@@ -31,7 +31,8 @@ public:
 	Cave* t3() const { return t3_; }
 	
 	std::string toString();
-	ostream& Print(ostream& os);
+	// overload << operator to print all Cave attributes
+	//friend std::ostream& std::operator<<(std::ostream& os, Cave* c);
 
 	void set_bat(bool state) { bat_=state; }
 	bool bat() const { return bat_; }
@@ -43,9 +44,6 @@ public:
 	int num_caves() const { return num_caves_; }
 	int id() const { return id_; }
 
-	void status(); // display status of cave atttributes
-	// overload << operator to print all Cave attributes
-	//friend ostream& operator<<(ostream& os, Cave* aCave);
 private:
 	Cave* prev_;
 	Cave* next_;

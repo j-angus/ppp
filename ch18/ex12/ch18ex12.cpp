@@ -11,10 +11,13 @@
 using std::cout;
 using std::endl;
 using std::ostream;
-
+#include <cstdlib>
 #include "cave.h"
 
 void srcfile_info(); // display basic source file information
+
+inline int randint(int max) { return rand()%max; }
+inline int randint(int min, int max) { return randint(max-min)+min; }
 
 // overload << operator to print Cave attributes
 ostream& operator<<(ostream& os, Cave* c);
@@ -27,9 +30,9 @@ int main()
 {
 	srcfile_info();
 	cout << "main()\n";
-	const int cave_size = 8; // Total number of caves to create
-	const int num_bats = cave_size/2;
-	const int num_pits = cave_size/2;
+	const int cave_size = 12; // Total number of caves to create
+	const int num_bats = cave_size/4;
+	const int num_pits = cave_size/4;
 
 	// Initialise cave list and cave data before getting into gameplay
 	// Create a list of caves
@@ -44,23 +47,61 @@ int main()
 
 	// Ok, so here need to setup links between caves, bats, pits and the wumpus
 	// This is cave initialisation after creating the cave list
-	// init_cave(myCave, num_bats, num_pits);
+	init_cave(myCave, num_bats, num_pits);
+	print_caves(myCave);
 }
 
 void init_cave(Cave* c, int bats, int pits)
-// initialise a cave list
+// initialise cave list attributes
 {
-	// check that bats is less than c->cave_number
-	// check that pits is less than c->cave_number
-	// wump must be set if c->next() == zero 
-	while (c) {
-		// randomly set bat to true, decrement bats if bat is set
-		// randomly set pit to true, decrement pits if pit is set
-		// randomly set wump to true, set a wump_set flag to true
-		// randomly set three tunnel links to other caves for each cave
-		c=c->next();
+	cout << "init_cave()\n";
+	if (!c) {
+		cout << "Error: no cave to initialise...\nx:";
 	}
-
+	if (bats>c->num_caves()) {
+		cout << "error, too many bats!, only one per cave allowed.\n" <<
+			"bats: " << bats << ", num_caves: " << c->num_caves() << endl;
+		return;
+	}
+	if (bats<0) {
+		cout << "Error: can't have negative number of bats, sorry...\n";
+		return;
+	}
+	if (pits>c->num_caves()) {
+		cout << "error, too many pits!, only one per cave allowed.\n" <<
+			"pits: " << pits << ", num_caves: " << c->num_caves() << endl;
+		return;
+	}
+	if (pits<0) {
+		cout << "Error: can't have negative number of pits, sorry...\n";
+		return;
+	}
+	// set the wump
+	int cave_id=randint(1,c->num_caves());
+	c=c->head();
+	c=c->find(cave_id);
+	c->set_wump(true);
+	c=c->head();
+	// set bats
+	while (bats) {
+		cave_id=randint(1,c->num_caves());
+		c=c->find(cave_id);
+		if (!c->bat()) {
+			c->set_bat(true);
+			--bats;
+		}
+		c=c->head();
+	}
+	// set pits
+	while (pits) {
+		cave_id=randint(1,c->num_caves());
+		c=c->find(cave_id);
+		if (!c->pit()) {
+			c->set_pit(true);
+			--pits;
+		}
+		c=c->head();
+	}
 }
 
 void print_caves(Cave* c)
@@ -68,8 +109,6 @@ void print_caves(Cave* c)
 	cout << "print_caves()\n";
 	while (c) {
 		cout << "Cave Object: " << &c << endl << c << endl;
-		//cout << c << endl;
-		//c->Print(cout);
 		c=c->next();
 	}
 	return;
@@ -82,26 +121,6 @@ std::ostream& operator<<(std::ostream& os, Cave* c)
 	return os;
 }
 
-// overload << operator to print all Cave attributes
-/*
-ostream& operator<<(ostream& os, Cave* aCave)
-{
-	os << "Cave Object:\n{\n";
-	os << "prev_: " << aCave->prev() << endl;
-	os << "next_: " << aCave->next() << endl;
-	os << "t1_: " << aCave->t1() << endl;
-	os << "t2_: " << aCave->t2() << endl;
-	os << "t3_: " << aCave->t3() << endl; 
-	os << "num_caves_: " << aCave->num_caves() << endl;
-	os << "bat_: " << (aCave->bat() ? "true" : "false") << endl;
-	os << "pit_: " << (aCave->pit() ? "true" : "false") << endl;
-	os << "wump_: " << (aCave->wump() ? "true" : "false") << endl;
-	os << "id_: " << aCave->id() << endl;
-	os << "}\n";
-	return os;
-}
-*/
-
 void srcfile_info()
 {
 	cout << "srcfile_info()\n";
@@ -110,3 +129,4 @@ void srcfile_info()
 	cout << " at " << __TIME__ << "\n\n";
 	return;
 }
+

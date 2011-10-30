@@ -85,28 +85,21 @@ Cave* Cave::find(int id)
 /*
 ostream& operator<<( ostream& os, const Cave* c )
 {
-	return c->Print(os);
+	os << c->toString();
+	return os;
 }
 */
-std::string Cave::toString()
+
+std::string Cave::toString() 
 {
-	std::ostringstream oss(std::ostringstream::out);
+	ostringstream oss(ostringstream::out);
 	oss << 
-		"{\n\tprev_: " << prev_ << ", next_: " << next_ << std::endl <<
-		"\tt1_: " << t1_ << ", t2_: " << t2_ << ", t3_: " << t3_ << std::endl <<
+		"{\n\tprev_: " << prev_ << ", next_: " << next_ << endl <<
+		"\tt1_: " << t1_ << ", t2_: " << t2_ << ", t3_: " << t3_ << endl <<
 		"\tid_: " << id_ << std::endl  <<
-		"\tbat_: " << (bat_ ? "true":"false") << std::endl <<
-		"\tpit_: " << (pit_ ? "true":"false") << std::endl <<
+		"\tbat_: " << (bat_ ? "true":"false") << endl <<
+		"\tpit_: " << (pit_ ? "true":"false") << endl <<
 		"\twumpus_: " << (wumpus_ ? "true":"false") << "\n}\n";
 	return oss.str();
 }
 
-ostream& Cave::Print(ostream& os) {
-	return os << 
-		"{\n\tprev_: " << prev_ << ", next_: " << next_ << std::endl <<
-		"\tt1_: " << t1_ << ", t2_: " << t2_ << ", t3_: " << t3_ << std::endl <<
-		"\tid_: " << id_ << std::endl  <<
-		"\tbat_: " << (bat_ ? "true":"false") << std::endl <<
-		"\tpit_: " << (pit_ ? "true":"false") << std::endl <<
-		"\twumpus_: " << (wumpus_ ? "true":"false") << "\n}\n";
-}
