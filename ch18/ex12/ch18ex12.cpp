@@ -115,7 +115,7 @@ void print_caves(Cave* c)
 }
 
 // overload << operator to print Cave attributes
-std::ostream& operator<<(std::ostream& os, Cave* c)
+ostream& operator<<(ostream& os, Cave* c)
 {
 	os << c->toString();
 	return os;
