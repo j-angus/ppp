@@ -4,7 +4,6 @@
  * @date 2011-10-23
  *
  * Write "hunt the wumpus" from ch18 ex12, page 644
- *
  */
 
 #include <iostream>
@@ -12,12 +11,16 @@ using std::cout;
 using std::endl;
 using std::ostream;
 #include <cstdlib>
+#include <ctime>
 #include "cave.h"
 
 void srcfile_info(); // display basic source file information
 
 inline int randint(int max) { return rand()%max; }
 inline int randint(int min, int max) { return randint(max-min)+min; }
+
+// describe contents of cave and give user action choices
+void show_cave(Cave* c);
 
 // overload << operator to print Cave attributes
 ostream& operator<<(ostream& os, Cave* c);
@@ -34,6 +37,8 @@ int main()
 	const int num_bats = cave_size/4;
 	const int num_pits = cave_size/4;
 
+	// initialize random seed:
+	srand ( time(NULL) );
 	// Initialise cave list and cave data before getting into gameplay
 	// Create a list of caves
 	Cave* myCave = new Cave();
@@ -58,10 +63,44 @@ int main()
 	//
 	bool player_alive = true;
 	bool wump_alive = true;
+	myCave=myCave->find(randint(1,myCave->num_caves()));
 	while (player_alive && wump_alive) {
-		cout << "play game loop\n";
+		cout << "In game loop\n";
+		show_cave(myCave);
+
 		break;
 	}
+}
+
+void show_cave(Cave* c)
+// describe contents of cave and give user action choices
+{
+	cout << "show_cave()\n";
+	bool player_alive=true;
+	cout << "You are in room " << c->id() << endl;
+	// detect cave nasties
+	if (c->wump()) {
+		cout << "There is an awful stench here...Meet the WUMPUS!!" <<
+			"You have met your doom.\n";
+		cout << "Game Over\n";
+		player_alive=false;
+	}
+	if (c->pit()) {
+		cout << "You have fallen into a bottomless pit.\n\tGame Over\n";
+		player_alive=false;
+	}
+	if (c->bat())
+		cout << "There is a nasty bat black here.\n";
+
+	// if player is still alive here, list action options
+	// list tunnels to other caves
+	if (player_alive) {
+		cout << "Tunnels to rooms:\n";
+		if (c->t1()) cout << c->t1()->id() << endl;
+		if (c->t2()) cout << c->t2()->id() << endl;
+		if (c->t3()) cout << c->t3()->id() << endl;
+	}
+	return;
 }
 
 void init_cave(Cave* c, int bats, int pits)
@@ -114,6 +153,23 @@ void init_cave(Cave* c, int bats, int pits)
 			--pits;
 		}
 		c=c->head();
+	}
+	// set up 3 tunnels to other rooms...
+	// d'oh, gotta loop through whole lisst for this to work...
+	cout << "Setting up tunnels\n";
+	Cave* p=c;
+	int c_id=0;
+	while (c) {
+		c_id = randint(1,c->num_caves());
+		c->set_t1(p->find(c_id));
+		p=p->head();
+		c_id = randint(1,c->num_caves());
+		c->set_t2(p->find(c_id));
+		p=p->head();
+		c_id = randint(1,c->num_caves());
+		c->set_t3(p->find(c_id));
+		p=p->head();
+		c=c->next();
 	}
 }
 

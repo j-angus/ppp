@@ -30,6 +30,10 @@ public:
 	Cave* t2() const { return t2_; }
 	Cave* t3() const { return t3_; }
 	
+	void set_t1(Cave* c) { t1_=c; }
+	void set_t2(Cave* c) { t2_=c; }
+	void set_t3(Cave* c) { t3_=c; }
+
 	std::string toString();
 	// overload << operator to print all Cave attributes
 	//friend std::ostream& std::operator<<(std::ostream& os, Cave* c);
